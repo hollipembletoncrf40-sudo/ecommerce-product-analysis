@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品选品分析框架表格</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #366092;
+            border-bottom: 2px solid #366092;
+            padding-bottom: 10px;
+            margin-top: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #366092;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+        .export-btn:hover {
+            background-color: #218838;
+        }
+        .section-title {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .section-title h3 {
+            color: #366092;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 产品选品分析框架表格</h1>
+        
+        <button class="export-btn" onclick="exportToExcel()">📊 导出为Excel</button>
+        <button class="export-btn" onclick="window.print()">🖨️ 打印表格</button>
+        
+        <div class="section-title">
+            <h3>📋 表格说明</h3>
+            <p>此表格基于图片内容提取，包含四个主要部分：产品分类与文化、受众群体、兴趣爱好、使用场景。可作为产品选品分析的基础框架。</p>
+        </div>
+
+        <h2>1. 产品分类与文化对应表</h2>
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>产品分类</th>
+                    <th>对应文化</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>亚马逊设备和配件</td><td>精神文化</td></tr>
+                <tr><td>亚马逊探索</td><td>哲学</td></tr>
+                <tr><td>亚马逊启动板</td><td>文学</td></tr>
+                <tr><td>家电</td><td>艺术</td></tr>
+                <tr><td>应用程序和游戏</td><td>宗教</td></tr>
+                <tr><td>艺术、手工艺和缝纫</td><td>物质文化</td></tr>
+                <tr><td>有声读物和原著</td><td>制度文化</td></tr>
+                <tr><td>汽车</td><td>中国亚文化</td></tr>
+                <tr><td>婴儿</td><td>美国亚文化</td></tr>
+                <tr><td>美容与个人护理</td><td>亚文化</td></tr>
+                <tr><td>图书</td><td>cosplay</td></tr>
+                <tr><td>相机和照片产品</td><td>ACG</td></tr>
+                <tr><td>CD和黑胶唱片</td><td>嘻哈</td></tr>
+                <tr><td>手机及配件</td><td>街舞</td></tr>
+                <tr><td>服装、鞋履和珠宝</td><td>极限运动</td></tr>
+                <tr><td>收藏货币</td><td>摇滚</td></tr>
+                <tr><td>电脑及配件</td><td>御宅</td></tr>
+                <tr><td>数字教育资源</td><td>二次元</td></tr>
+                <tr><td>数字音乐</td><td>网游</td></tr>
+                <tr><td>电子产品</td><td>弹幕</td></tr>
+            </tbody>
+        </table>
+
+        <h2>2. 受众群体分类表</h2>
+        <table id="audienceTable">
+            <thead>
+                <tr>
+                    <th>分类</th>
+                    <th>子分类</th>
+                    <th>具体内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>性别分类</td><td></td><td>男人</td></tr>
+                <tr><td>性别分类</td><td></td><td>女人</td></tr>
+                <tr><td>性别分类</td><td></td><td>两性人</td></tr>
+                <tr><td>年龄分类</td><td>婴儿</td><td>0-1岁</td></tr>
+                <tr><td>年龄分类</td><td>婴幼儿</td><td>1-3岁</td></tr>
+                <tr><td>年龄分类</td><td>儿童</td><td>4-6岁</td></tr>
+                <tr><td>年龄分类</td><td>少年</td><td>7-13岁</td></tr>
+                <tr><td>年龄分类</td><td>青少年</td><td>14-17岁</td></tr>
+                <tr><td>年龄分类</td><td>成年人</td><td>18岁以上</td></tr>
+                <tr><td>职业分类</td><td></td><td>渔业</td></tr>
+                <tr><td>职业分类</td><td></td><td>水利业</td></tr>
+                <tr><td>职业分类</td><td></td><td>采掘业</td></tr>
+                <tr><td>职业分类</td><td></td><td>食品、饮料制造业</td></tr>
+                <tr><td>职业分类</td><td></td><td>纺织业</td></tr>
+                <tr><td>职业分类</td><td></td><td>缝纫业</td></tr>
+                <tr><td>职业分类</td><td></td><td>家具制造业</td></tr>
+                <tr><td>职业分类</td><td></td><td>造纸及纸制品业</td></tr>
+                <tr><td>动物分类</td><td></td><td>狗, 猫, 猪, 鸡, 鸭, 鹅</td></tr>
+                <tr><td>动物分类</td><td></td><td>鱼, 鸟, 马, 猴, 象, 蛇</td></tr>
+                <tr><td>动物分类</td><td></td><td>龟, 蝴蝶, 蜻蜓, 鸽子, 鲸鱼, 鲨鱼</td></tr>
+                <tr><td>动物分类</td><td></td><td>蜥蜴, 鳄鱼</td></tr>
+            </tbody>
+        </table>
+
+        <h2>3. 兴趣爱好分类表</h2>
+        <table id="interestsTable">
+            <thead>
+                <tr>
+                    <th>兴趣分类</th>
+                    <th>具体内容</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>运动类</td><td>球类, 跳绳, 马术, 击剑, 游泳, 帆船, 举重, 拳击, 散打, 空手道, 跑步, 骑行, 登山, 狩猎, 滑翔</td></tr>
+                <tr><td>娱乐类</td><td>听唱歌, 看电影, 绘画, 乐器, 写作, 戏剧, 舞蹈, 比赛, 魔术, 烹饪</td></tr>
+                <tr><td>冒险类</td><td>空中, 陆地, 水上</td></tr>
+                <tr><td>游戏类</td><td>运动游戏, 纸牌游戏, 水上游戏, 真人模拟游戏, 酒会游戏, 团建游戏, 个人游戏, 智力游戏, 射击游戏, 竞速游戏, 动作游戏, 恋爱游戏, 冒险游戏, 文字游戏, 动作/冒险/模拟/角色扮演</td></tr>
+                <tr><td>网游类</td><td>英雄联盟, QQ堂, CS, 地下城勇士, 魔兽, 传奇, 红警</td></tr>
+                <tr><td>乐器类</td><td>西方乐器, 中国乐器, 日本乐器</td></tr>
+                <tr><td>文艺类</td><td>插花, 剪/折纸, 绘画, 品茶, 涂鸦, 园林, 写作, 动画, 书法, 雕塑, 壁画, 陶瓷设计标本, 舞台设计钟表, 艺术设计名石</td></tr>
+                <tr><td>收藏类</td><td>文物, 书画, 陶瓷, 玉器, 珠宝, 邮票, 钱币, 票券, 模型, 徽章, 商标, 器皿, 藏酒</td></tr>
+                <tr><td>其他类</td><td>钓鱼, 扳手腕, cosplay, ACG, 黑客联盟卧室</td></tr>
+            </tbody>
+        </table>
+
+        <h2>4. 使用场景分类表</h2>
+        <table id="scenariosTable">
+            <thead>
+                <tr>
+                    <th>场景分类</th>
+                    <th>具体场景</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>室内场景</td><td>家里, 客厅, 厨房, 卫生间, 黑客联盟卧室, 书房, 阁楼, 车库, 地下室, 阳台, 公司, 餐厅, 超市, 咖啡厅, 酒吧, 服装店, 工厂, 学校, 车内, 地铁</td></tr>
+                <tr><td>室外场景</td><td>花园, 游泳池, 篮球场, 足球场, 棒球场, 湖边, 丛林, 公路, 步行街, 牧场, 渔场, 海边, 沙滩, 公园, 小岛上</td></tr>
+            </tbody>
+        </table>
+
+        <div class="section-title">
+            <h3>💡 使用建议</h3>
+            <ul>
+                <li><strong>产品定位：</strong> 根据产品分类找到对应的文化背景，确定产品调性</li>
+                <li><strong>目标受众：</strong> 结合性别、年龄、职业等维度，精准定位用户群体</li>
+                <li><strong>营销策略：</strong> 基于用户兴趣爱好，制定针对性的营销内容</li>
+                <li><strong>场景应用：</strong> 考虑产品在不同场景下的使用需求，优化产品设计</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function exportToExcel() {
+            // 创建Excel文件
+            const wb = XLSX.utils.book_new();
+            
+            // 添加各个表格
+            const productsTable = document.getElementById('productsTable');
+            const productsWs = XLSX.utils.table_to_sheet(productsTable);
+            XLSX.utils.book_append_sheet(wb, productsWs, "产品分类与文化");
+            
+            const audienceTable = document.getElementById('audienceTable');
+            const audienceWs = XLSX.utils.table_to_sheet(audienceTable);
+            XLSX.utils.book_append_sheet(wb, audienceWs, "受众群体");
+            
+            const interestsTable = document.getElementById('interestsTable');
+            const interestsWs = XLSX.utils.table_to_sheet(interestsTable);
+            XLSX.utils.book_append_sheet(wb, interestsWs, "兴趣爱好");
+            
+            const scenariosTable = document.getElementById('scenariosTable');
+            const scenariosWs = XLSX.utils.table_to_sheet(scenariosTable);
+            XLSX.utils.book_append_sheet(wb, scenariosWs, "使用场景");
+            
+            // 下载文件
+            XLSX.writeFile(wb, '产品选品分析框架表格.xlsx');
+        }
+    </script>
+    
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>

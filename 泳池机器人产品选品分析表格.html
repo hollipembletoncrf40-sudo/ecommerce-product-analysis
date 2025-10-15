@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泳池机器人产品选品分析表格</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #366092;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+        .export-btn:hover {
+            background-color: #218838;
+        }
+        .section-title {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .section-title h3 {
+            color: #366092;
+            margin-top: 0;
+        }
+        .high-priority {
+            background-color: #d4edda;
+            font-weight: bold;
+        }
+        .medium-priority {
+            background-color: #fff3cd;
+        }
+        .low-priority {
+            background-color: #f8d7da;
+        }
+        .high-creativity {
+            background-color: #d1ecf1;
+            font-weight: bold;
+        }
+        .medium-creativity {
+            background-color: #e2e3e5;
+        }
+        .low-creativity {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 泳池机器人产品选品分析表格</h1>
+        
+        <button class="export-btn" onclick="exportToExcel()">📊 导出为Excel</button>
+        <button class="export-btn" onclick="exportToImage()">🖼️ 下载为图片</button>
+        <button class="export-btn" onclick="window.print()">🖨️ 打印表格</button>
+        
+        <div class="section-title">
+            <h3>📋 表格说明</h3>
+            <p>此表格包含泳池机器人产品的全面选品分析，涵盖产品建议、营销策略、平台推荐等维度。</p>
+        </div>
+
+        <table id="poolRobotTable">
+            <thead>
+                <tr>
+                    <th>基础产品名称</th>
+                    <th>核心功能/卖点</th>
+                    <th>用户输入场景</th>
+                    <th>核心受众群体</th>
+                    <th>用户输入兴趣爱好</th>
+                    <th>主题/IP关联</th>
+                    <th>文化背景</th>
+                    <th>材质/工艺创新方向</th>
+                    <th>设计风格</th>
+                    <th>潜在产品建议1 (创意度: [标签])</th>
+                    <th>潜在产品建议2 (创意度: [标签])</th>
+                    <th>潜在产品建议3 (创意度: [标签])</th>
+                    <th>营销亮点1 (优先级: [标签])</th>
+                    <th>营销亮点2 (优先级: [标签])</th>
+                    <th>营销亮点3 (优先级: [标签])</th>
+                    <th>目标平台建议1 (平台: [名称], 理由: [详细说明])</th>
+                    <th>目标平台建议2 (平台: [名称], 理由: [详细说明])</th>
+                    <th>目标平台建议3 (平台: [名称], 理由: [详细说明])</th>
+                    <th>目标受众细分</th>
+                    <th>潜在使用场景拓展</th>
+                    <th>相似/关联产品类目</th>
+                    <th>风险评估/注意事项</th>
+                    <th>生命周期预测</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>智能泳池清洁机器人</strong></td>
+                    <td>
+                        <strong>1. 自动化清洁</strong> - 自动清洁池底和池壁<br>
+                        <strong>2. 智能控制</strong> - APP远程控制，定时清洁<br>
+                        <strong>3. AI识别</strong> - 智能识别污渍类型，规划清洁路径<br>
+                        <strong>4. 节能环保</strong> - 太阳能充电，环保无污染<br>
+                        <strong>5. 安全可靠</strong> - 防缠绕设计，安全保护
+                    </td>
+                    <td>家庭泳池、别墅泳池、小型商业泳池</td>
+                    <td>高端家庭用户、科技爱好者、忙碌专业人士</td>
+                    <td>科技、智能家居、环保、运动、健康</td>
+                    <td>
+                        <strong>科技智能</strong> - 强调AI技术和智能化<br>
+                        <strong>环保理念</strong> - 太阳能充电，绿色清洁<br>
+                        <strong>高端生活</strong> - 别墅、度假村等高端场景<br>
+                        <strong>便利生活</strong> - 解放双手，智能生活
+                    </td>
+                    <td>
+                        <strong>智能家居文化</strong> - 智能家居产品普及<br>
+                        <strong>环保文化</strong> - 绿色环保理念深入人心<br>
+                        <strong>科技文化</strong> - AI技术应用广泛<br>
+                        <strong>品质生活文化</strong> - 追求高品质生活
+                    </td>
+                    <td>
+                        <strong>AI芯片</strong> - 智能识别和处理<br>
+                        <strong>太阳能板</strong> - 环保充电技术<br>
+                        <strong>锂电池</strong> - 高容量长续航<br>
+                        <strong>防水材料</strong> - 专业防水设计<br>
+                        <strong>传感器</strong> - 环境感知技术
+                    </td>
+                    <td>
+                        <strong>科技风</strong> - 流线型设计，LED灯效<br>
+                        <strong>简约风</strong> - 简洁现代，功能至上<br>
+                        <strong>环保风</strong> - 绿色配色，自然元素<br>
+                        <strong>高端风</strong> - 金属质感，奢华感
+                    </td>
+                    <td class="high-creativity">
+                        <strong>AI智能泳池机器人 (高创意)</strong><br>
+                        AI识别污渍类型，智能规划清洁路径，机器学习算法，越用越智能。价格区间: 2000-4000元。
+                    </td>
+                    <td class="high-creativity">
+                        <strong>太阳能+锂电池双动力机器人 (高创意)</strong><br>
+                        太阳能充电+锂电池备用，24小时不间断工作，环保节能，适合户外使用。价格区间: 1500-3000元。
+                    </td>
+                    <td class="high-creativity">
+                        <strong>模块化多功能泳池机器人 (高创意)</strong><br>
+                        可拆卸模块，清洁+检测+投药一体化，模块化设计，按需配置功能。价格区间: 1800-3500元。
+                    </td>
+                    <td class="high-priority">
+                        <strong>"解放双手，智能清洁" (高优先级)</strong><br>
+                        强调自动化特点，突出便利性，吸引忙碌用户。
+                    </td>
+                    <td class="high-priority">
+                        <strong>"AI智能，越用越聪明" (高优先级)</strong><br>
+                        突出AI技术，强调学习能力，吸引科技爱好者。
+                    </td>
+                    <td class="high-priority">
+                        <strong>"24小时守护，泳池永远清澈" (高优先级)</strong><br>
+                        强调持续清洁，突出效果保证，吸引追求品质用户。
+                    </td>
+                    <td>
+                        <strong>亚马逊 (平台: Amazon)</strong><br>
+                        <em>理由:</em> 流量大、用户信任度高、适合中高端产品，有完善的物流和售后服务，用户评价系统完善，适合建立品牌信誉
+                    </td>
+                    <td>
+                        <strong>天猫/京东 (平台: 国内电商)</strong><br>
+                        <em>理由:</em> 国内用户集中、物流快速、售后服务完善，适合快速测试市场反应，高端用户集中
+                    </td>
+                    <td>
+                        <strong>独立站 (平台: 自建网站)</strong><br>
+                        <em>理由:</em> 品牌建设、用户数据收集、利润空间大，可建立用户社区，提供专业咨询服务
+                    </td>
+                    <td>
+                        <strong>家庭用户</strong> - 别墅业主、高端住宅用户、科技爱好者、忙碌专业人士<br>
+                        <strong>商业用户</strong> - 酒店/度假村、健身房、物业公司<br>
+                        <strong>专业用户</strong> - 泳池维护公司、学校
+                    </td>
+                    <td>
+                        <strong>家庭泳池</strong> - 日常自动维护和清洁<br>
+                        <strong>别墅泳池</strong> - 24小时智能清洁服务<br>
+                        <strong>酒店泳池</strong> - 客房服务的一部分<br>
+                        <strong>健身房泳池</strong> - 会员使用后的自动清洁<br>
+                        <strong>学校泳池</strong> - 教学使用后的维护<br>
+                        <strong>度假村泳池</strong> - 季节性维护和日常清洁
+                    </td>
+                    <td>泳池设备、智能清洁设备、机器人产品、智能家居设备、自动化设备、户外清洁设备、环保清洁用品、运动器材、休闲娱乐设备、物业管理设备、酒店用品</td>
+                    <td>
+                        <strong>生产风险</strong> - 技术门槛高，AI和机器人技术需要专业团队；质量把控严格，涉及水下作业，质量要求极高；供应链复杂，需要稳定的电机、传感器供应商；研发成本高，技术研发投入大，周期长<br>
+                        <strong>营销风险</strong> - 用户教育成本高，需要教育用户正确使用和维护；季节性影响，泳池使用有季节性，影响销售；竞争激烈，市场已有成熟品牌如Dolphin、Polaris；价格敏感，高端产品价格敏感度较高<br>
+                        <strong>合规风险</strong> - 安全认证要求高，涉及水下作业，需要相关安全认证；环保标准严格，需要符合环保要求；知识产权保护，避免侵犯他人专利，保护自有技术；质量标准高，需要符合相关质量标准
+                    </td>
+                    <td>
+                        <strong>新品期</strong> (0-6个月) - 市场教育、用户反馈收集、技术优化<br>
+                        <strong>成长期</strong> (6-18个月) - 产品迭代、市场扩张、品牌建设<br>
+                        <strong>成熟期</strong> (18-36个月) - 品牌建设、渠道拓展、技术升级<br>
+                        <strong>衰退期</strong> (36个月+) - 产品升级、新品类开发、技术革新
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-title">
+            <h3>💡 产品开发建议</h3>
+            <ul>
+                <li><strong>技术重点：</strong> AI算法优化、电池技术、传感器技术、通信技术</li>
+                <li><strong>功能创新：</strong> 多模式清洁、智能避障、自清洁功能、数据记录</li>
+                <li><strong>用户体验：</strong> 简单操作、远程监控、维护提醒、故障诊断</li>
+                <li><strong>市场策略：</strong> 重点推广AI智能功能，突出环保理念，强调便利性</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function exportToExcel() {
+            // 创建Excel文件
+            const table = document.getElementById('poolRobotTable');
+            const wb = XLSX.utils.table_to_book(table, {sheet: "泳池机器人选品分析"});
+            
+            // 设置列宽
+            const ws = wb.Sheets["泳池机器人选品分析"];
+            const colWidths = [];
+            for (let i = 0; i < 23; i++) {
+                colWidths.push({wch: 20});
+            }
+            ws['!cols'] = colWidths;
+            
+            // 下载文件
+            XLSX.writeFile(wb, '泳池机器人产品选品分析表格.xlsx');
+        }
+
+        function exportToImage() {
+            // 使用html2canvas库将表格转换为图片
+            const table = document.getElementById('poolRobotTable');
+            const container = document.querySelector('.container');
+            
+            // 创建临时容器，只包含表格
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.backgroundColor = 'white';
+            tempContainer.style.padding = '20px';
+            tempContainer.style.fontFamily = 'Microsoft YaHei, Arial, sans-serif';
+            
+            // 复制表格
+            const clonedTable = table.cloneNode(true);
+            clonedTable.style.width = '100%';
+            clonedTable.style.borderCollapse = 'collapse';
+            clonedTable.style.fontSize = '12px';
+            
+            // 设置表格样式
+            const style = document.createElement('style');
+            style.textContent = `
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+                th { background-color: #366092; color: white; font-weight: bold; }
+                tr:nth-child(even) { background-color: #f9f9f9; }
+                .high-priority { background-color: #d4edda; font-weight: bold; }
+                .medium-priority { background-color: #fff3cd; }
+                .low-priority { background-color: #f8d7da; }
+                .high-creativity { background-color: #d1ecf1; font-weight: bold; }
+                .medium-creativity { background-color: #e2e3e5; }
+                .low-creativity { background-color: #f8f9fa; }
+            `;
+            
+            tempContainer.appendChild(style);
+            tempContainer.appendChild(clonedTable);
+            document.body.appendChild(tempContainer);
+            
+            // 使用html2canvas转换为图片
+            html2canvas(tempContainer, {
+                backgroundColor: 'white',
+                scale: 2, // 提高图片清晰度
+                useCORS: true,
+                allowTaint: true,
+                width: tempContainer.scrollWidth,
+                height: tempContainer.scrollHeight
+            }).then(canvas => {
+                // 创建下载链接
+                const link = document.createElement('a');
+                link.download = '泳池机器人产品选品分析表格.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // 清理临时元素
+                document.body.removeChild(tempContainer);
+            }).catch(error => {
+                console.error('图片生成失败:', error);
+                alert('图片生成失败，请尝试其他导出方式');
+                document.body.removeChild(tempContainer);
+            });
+        }
+    </script>
+    
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- 引入html2canvas库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

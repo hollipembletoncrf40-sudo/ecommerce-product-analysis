@@ -1,0 +1,2085 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宠物护理产品选品分析表格</title>
+    <style>
+        :root {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: white;
+            --text-primary: #333;
+            --text-secondary: #666;
+            --border-color: #ddd;
+            --accent-color: #366092;
+            --hover-bg: #f0f8ff;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --border-color: #444;
+            --accent-color: #4a9eff;
+            --hover-bg: #3a3a3a;
+            --shadow: 0 2px 10px rgba(0,0,0,0.3);
+            --glass-bg: rgba(45, 45, 45, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="high-contrast"] {
+            --bg-primary: #000000;
+            --bg-secondary: #1a0000;
+            --text-primary: #ffffff;
+            --text-secondary: #ffcccc;
+            --border-color: #ff0000;
+            --accent-color: #ff0000;
+            --hover-bg: #330000;
+            --shadow: 0 2px 10px rgba(255,0,0,0.5);
+            --glass-bg: rgba(0, 0, 0, 0.95);
+            --glass-border: rgba(255, 0, 0, 0.8);
+        }
+
+        [data-theme="blog"] {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --accent-color: #007bff;
+            --hover-bg: #e9ecef;
+            --shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(0, 123, 255, 0.1);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+        }
+        h1 {
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.5em;
+            background: linear-gradient(135deg, var(--accent-color), #4a9eff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 30px;
+            font-weight: 500;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+            color: var(--text-primary);
+        }
+        th {
+            background: linear-gradient(135deg, var(--accent-color), #4a9eff);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        tr:nth-child(even) {
+            background-color: rgba(74, 158, 255, 0.05);
+        }
+        tr:hover {
+            background-color: var(--hover-bg);
+            transform: translateY(-1px);
+            transition: all 0.2s ease;
+        }
+        .export-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 10px 5px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+            background: linear-gradient(135deg, #20c997, #28a745);
+        }
+        .export-btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .theme-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        .theme-selector select {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: 0.9em;
+        }
+        .section-title {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            margin: 20px 0;
+            border: 1px solid var(--glass-border);
+        }
+        .section-title h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-weight: 500;
+        }
+        
+        /* 标题头部容器 */
+        .title-header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        /* 创建者署名样式 */
+        .creator-signature {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .creator-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 8px 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .creator-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .creator-content:hover::before {
+            left: 100%;
+        }
+        
+        .creator-content:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: var(--accent-color);
+        }
+        
+        .creator-icon {
+            font-size: 14px;
+            animation: sparkle 2s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .creator-content:hover .creator-icon {
+            transform: scale(1.2) rotate(15deg);
+            filter: drop-shadow(0 0 8px rgba(255,215,0,0.6));
+        }
+        
+        .creator-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+        
+        .creator-name {
+            font-size: 14px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+        
+        .creator-content:hover .creator-name {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 10px rgba(255,107,107,0.4));
+        }
+        
+        .creator-content:hover .creator-text {
+            color: var(--accent-color);
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { 
+                transform: scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: scale(1.1) rotate(180deg);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { 
+                background-position: 0% 50%;
+            }
+            50% { 
+                background-position: 100% 50%;
+            }
+        }
+        .high-priority {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.3), rgba(25, 135, 84, 0.2));
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 4px 8px;
+        }
+        .medium-priority {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 235, 59, 0.2));
+            border-radius: 8px;
+            padding: 4px 8px;
+        }
+        .low-priority {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(255, 107, 107, 0.15));
+            border-radius: 8px;
+            padding: 4px 8px;
+        }
+        .high-creativity {
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.3), rgba(100, 180, 255, 0.2));
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 4px 8px;
+        }
+        .medium-creativity {
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.2), rgba(100, 180, 255, 0.15));
+            border-radius: 8px;
+            padding: 4px 8px;
+        }
+        .low-creativity {
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), rgba(120, 200, 255, 0.08));
+            border-radius: 8px;
+            padding: 4px 8px;
+        }
+        .table-section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        .summary-section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 16px;
+            margin: 30px 0;
+            border: 1px solid var(--glass-border);
+        }
+        .summary-section h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-weight: 500;
+        }
+        .product-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .product-card h4 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-weight: 500;
+        }
+
+        /* 数据可视化样式 */
+        .chart-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid var(--glass-border);
+        }
+        .chart-title {
+            color: var(--accent-color);
+            font-size: 1.2em;
+            font-weight: 500;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(74, 158, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #4a9eff);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.2em;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+        .slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+
+        /* 布局优化 */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 20px;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .sidebar h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+            font-size: 1.1em;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar li {
+            margin: 10px 0;
+        }
+        .sidebar a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        .sidebar a:hover {
+            background: var(--hover-bg);
+            color: var(--accent-color);
+        }
+        .content-area {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* 字体设置 */
+        .font-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 15px;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            min-width: 200px;
+        }
+        .font-controls h4 {
+            color: var(--accent-color);
+            margin: 0 0 10px 0;
+            font-size: 0.9em;
+        }
+        .font-size-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .font-size-control button {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        .font-size-control button:hover {
+            background: #4a9eff;
+        }
+        .font-family-select {
+            width: 100%;
+            padding: 5px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        /* 数据丰富化样式 */
+        .data-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .data-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .data-value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        .data-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+        .trend-up {
+            color: #28a745;
+        }
+        .trend-down {
+            color: #dc3545;
+        }
+
+        /* 高对比度模式特殊样式 - 简洁设计 */
+        [data-theme="high-contrast"] .container {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--accent-color);
+            box-shadow: var(--shadow);
+        }
+        [data-theme="high-contrast"] .section-title {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 4px solid var(--accent-color);
+            border-bottom: 1px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] .data-card {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 3px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] .product-card {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 3px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] table {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] th {
+            background: var(--accent-color);
+            color: #000000;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] td {
+            border: none;
+            border-bottom: 1px solid var(--accent-color);
+            color: var(--text-primary);
+        }
+        [data-theme="high-contrast"] .high-priority {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .medium-priority {
+            background: #ff6666;
+            color: #000000;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .low-priority {
+            background: #ff9999;
+            color: #000000;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .high-creativity {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .medium-creativity {
+            background: #ff6666;
+            color: #000000;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .low-creativity {
+            background: #ff9999;
+            color: #000000;
+            border: none;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .export-btn {
+            background: var(--accent-color);
+            color: #000000;
+            border: 1px solid #000000;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .export-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] .sidebar {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] .content-area {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--accent-color);
+        }
+        [data-theme="high-contrast"] .theme-selector {
+            background: var(--accent-color);
+            border: 1px solid #000000;
+        }
+        [data-theme="high-contrast"] .theme-selector select {
+            background: #000000;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .font-controls {
+            background: var(--accent-color);
+            border: 1px solid #000000;
+        }
+        [data-theme="high-contrast"] .font-controls h4 {
+            color: #000000;
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .font-size-control button {
+            background: #000000;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            font-weight: bold;
+        }
+        [data-theme="high-contrast"] .font-family-select {
+            background: #000000;
+            color: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            font-weight: bold;
+        }
+        
+        /* 高对比度模式创建者署名 */
+        [data-theme="high-contrast"] .creator-content {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 2px solid var(--accent-color);
+        }
+        
+        [data-theme="high-contrast"] .creator-name {
+            background: var(--accent-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        [data-theme="high-contrast"] .creator-text {
+            color: var(--text-primary);
+        }
+
+        /* 博客效果样式 */
+        [data-theme="blog"] .container {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow);
+        }
+        [data-theme="blog"] .section-title {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 4px solid var(--accent-color);
+        }
+        [data-theme="blog"] .data-card {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 3px solid var(--accent-color);
+        }
+        [data-theme="blog"] .product-card {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 3px solid var(--accent-color);
+        }
+        
+        /* 博客效果模式创建者署名 */
+        [data-theme="blog"] .creator-content {
+            background: var(--glass-bg);
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+        }
+        
+        [data-theme="blog"] .creator-name {
+            background: var(--accent-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                position: static;
+                margin-bottom: 20px;
+            }
+            .font-controls {
+                position: static;
+                margin: 20px 0;
+                bottom: auto;
+                left: auto;
+            }
+            .theme-selector {
+                position: static;
+                margin: 20px 0;
+                top: auto;
+                right: auto;
+            }
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* 移动端标题头部 */
+            .title-header {
+                justify-content: center;
+                margin-bottom: 15px;
+            }
+            
+            /* 移动端创建者署名 */
+            .creator-signature {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                margin: 0;
+                padding: 0;
+            }
+            
+            .creator-content {
+                padding: 6px 12px;
+                gap: 6px;
+            }
+            
+            .creator-icon {
+                font-size: 12px;
+            }
+            
+            .creator-text {
+                font-size: 10px;
+            }
+            
+            .creator-name {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 主题选择器 -->
+    <div class="theme-selector">
+        <select onchange="changeTheme(this.value)">
+            <option value="light">浅色模式</option>
+            <option value="dark">深色模式</option>
+            <option value="high-contrast">高对比度</option>
+            <option value="blog">博客效果</option>
+        </select>
+    </div>
+
+
+    <!-- 字体设置控件 -->
+    <div class="font-controls">
+        <h4>字体设置</h4>
+        <div class="font-size-control">
+            <button onclick="changeFontSize(-1)">A-</button>
+            <span id="font-size-display">14px</span>
+            <button onclick="changeFontSize(1)">A+</button>
+        </div>
+        <select class="font-family-select" onchange="changeFontFamily(this.value)">
+            <option value="system">系统字体</option>
+            <option value="apple">苹果字体</option>
+            <option value="microsoft">微软雅黑</option>
+            <option value="arial">Arial</option>
+            <option value="times">Times New Roman</option>
+        </select>
+    </div>
+
+    <div class="main-layout">
+        <!-- 侧边栏 -->
+        <div class="sidebar fade-in-up">
+            <h3>📊 导航菜单</h3>
+            <ul>
+                <li><a href="#basicInfo">产品基本信息</a></li>
+                <li><a href="#designInfo">产品设计与发展</a></li>
+                <li><a href="#productMarketing">产品建议与营销</a></li>
+                <li><a href="#platformMarket">平台与市场分析</a></li>
+                <li><a href="#riskPrediction">风险与预测</a></li>
+                <li><a href="#dataVisualization">数据可视化</a></li>
+                <li><a href="#summary">选品建议总结</a></li>
+            </ul>
+            
+            <h3>📈 快速统计</h3>
+            <div class="data-card">
+                <div class="data-value">3</div>
+                <div class="data-label">高创意产品</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">85%</div>
+                <div class="data-label">市场潜力</div>
+            </div>
+            <div class="data-card">
+                <div class="data-value">¥350</div>
+                <div class="data-label">平均价格</div>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="content-area">
+            <!-- 标题和署名并列 -->
+            <div class="title-header">
+                <h1 class="fade-in-up">🐾 宠物护理产品选品分析表格</h1>
+                <!-- 创建者署名 - 与标题并列 -->
+                <div class="creator-signature">
+                    <div class="creator-content">
+                        <span class="creator-icon">✨</span>
+                        <span class="creator-text">Created by</span>
+                        <span class="creator-name">Josephine</span>
+                        <span class="creator-icon">✨</span>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="export-btn-group fade-in-up">
+                <button class="export-btn" onclick="exportToExcel()">📊 导出为Excel</button>
+                <button class="export-btn" onclick="exportToImage()">🖼️ 下载为图片</button>
+                <button class="export-btn" onclick="exportToMultipleImages()">📸 下载多个表格图片</button>
+                <button class="export-btn" onclick="exportToFullImageFixed()" style="background: #17a2b8;">📋 完整内容导出</button>
+                <button class="export-btn" onclick="exportToFullImageAlternative()" style="background: #28a745;">📄 分段导出大图</button>
+                <button class="export-btn" onclick="window.print()">🖨️ 打印表格</button>
+                <button class="export-btn" onclick="checkLibrariesLoaded()" style="background: #6c757d;">🔧 检查库状态</button>
+            </div>
+        
+            <div class="section-title slide-in-left">
+                <h3>📋 表格说明</h3>
+                <p>此表格包含宠物护理产品的全面选品分析，涵盖产品建议、营销策略、平台推荐等维度。支持多种导出方式。</p>
+            </div>
+
+        <!-- 产品基本信息表格 -->
+        <div class="table-section" id="basicInfo">
+            <h2>📦 产品基本信息</h2>
+            <table id="basicInfoTable">
+                <thead>
+                    <tr>
+                        <th>基础产品名称</th>
+                        <th>核心功能/卖点</th>
+                        <th>用户输入场景</th>
+                        <th>核心受众群体</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>环保智能宠物护理用品</strong></td>
+                        <td>
+                            <strong>1. 环保材质</strong> - 可降解、无毒无害的天然材料<br>
+                            <strong>2. 智能监测</strong> - 健康状态监测、行为分析<br>
+                            <strong>3. 便携设计</strong> - 轻量化、可折叠、易收纳<br>
+                            <strong>4. 多功能性</strong> - 一物多用，适应多种护理需求<br>
+                            <strong>5. 安全保护</strong> - 防滑设计、温和配方、无刺激
+                        </td>
+                        <td>家庭宠物护理、户外活动</td>
+                        <td>年轻女性（25-35岁），中高端收入，宠物新手/专业用户</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 产品设计与发展表格 -->
+        <div class="table-section" id="designInfo">
+            <h2>🎨 产品设计与发展</h2>
+            <table id="designInfoTable">
+                <thead>
+                    <tr>
+                        <th>主题/IP关联</th>
+                        <th>文化背景</th>
+                        <th>材质/工艺创新方向</th>
+                        <th>设计风格</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>萌宠文化</strong> - 与可爱宠物形象、表情包文化结合<br>
+                            <strong>绿色生活</strong> - 强调环保理念和可持续发展<br>
+                            <strong>科技生活</strong> - 智能家居、物联网概念<br>
+                            <strong>健康生活</strong> - 宠物健康、主人健康双重关注
+                        </td>
+                        <td>
+                            <strong>宠物经济</strong> - 宠物市场规模快速增长，消费升级<br>
+                            <strong>女性消费</strong> - 年轻女性是宠物消费主力军<br>
+                            <strong>环保意识</strong> - 绿色消费理念深入人心<br>
+                            <strong>科技生活</strong> - 智能家居产品普及，用户接受度高
+                        </td>
+                        <td>
+                            <strong>天然材质</strong> - 竹纤维、玉米淀粉、可降解塑料<br>
+                            <strong>智能材料</strong> - 温感材料、抗菌涂层、自清洁表面<br>
+                            <strong>环保工艺</strong> - 无污染生产、可回收包装<br>
+                            <strong>人体工学</strong> - 符合人体工程学的设计
+                        </td>
+                        <td>
+                            <strong>简约可爱</strong> - 简洁线条、萌宠元素、温馨配色<br>
+                            <strong>科技感</strong> - 流线型设计、LED指示灯、现代感<br>
+                            <strong>自然风</strong> - 仿生设计、自然色彩、有机形状<br>
+                            <strong>北欧风</strong> - 极简主义、功能性、美观性并重
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 产品建议与营销表格 -->
+        <div class="table-section" id="productMarketing">
+            <h2>💡 产品建议与营销</h2>
+            <table id="productMarketingTable">
+                <thead>
+                    <tr>
+                        <th>产品建议1 (创意度)</th>
+                        <th>产品建议2 (创意度)</th>
+                        <th>营销亮点1 (优先级)</th>
+                        <th>营销亮点2 (优先级)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="high-creativity">
+                            <strong>智能宠物健康监测器 (高创意)</strong><br>
+                            实时监测宠物体温、心率、活动量，APP健康报告、异常提醒，环保材质，可降解设计。价格区间: 300-450元。
+                        </td>
+                        <td class="high-creativity">
+                            <strong>多功能宠物护理套装 (高创意)</strong><br>
+                            清洁+美容+健康检测一体化，模块化设计，按需组合，天然成分，温和无刺激。价格区间: 250-400元。
+                        </td>
+                        <td class="high-priority">
+                            <strong>"环保爱宠，绿色生活" (高优先级)</strong><br>
+                            强调环保理念，吸引环保意识用户，突出产品绿色属性，建立品牌形象。
+                        </td>
+                        <td class="high-priority">
+                            <strong>"智能护理，轻松养宠" (高优先级)</strong><br>
+                            强调智能化特点，突出便利性，吸引追求科技生活的年轻用户。
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 平台与市场分析表格 -->
+        <div class="table-section" id="platformMarket">
+            <h2>🏪 平台与市场分析</h2>
+            <table id="platformMarketTable">
+                <thead>
+                    <tr>
+                        <th>目标平台建议1</th>
+                        <th>目标平台建议2</th>
+                        <th>目标受众细分</th>
+                        <th>使用场景拓展</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>小红书 (平台: 小红书)</strong><br>
+                            <em>理由:</em> 年轻女性用户集中、生活方式内容社区、用户粘性高，适合分享使用心得和效果对比，宠物内容热门
+                        </td>
+                        <td>
+                            <strong>天猫/京东 (平台: 国内电商)</strong><br>
+                            <em>理由:</em> 国内用户集中、物流快速、售后服务完善，适合快速测试市场反应，中高端用户集中
+                        </td>
+                        <td>
+                            <strong>新手宠物主人</strong> - 25-30岁，刚开始养宠，需要简单易用的产品<br>
+                            <strong>资深宠物主人</strong> - 30-35岁，有丰富经验，追求专业品质<br>
+                            <strong>环保意识用户</strong> - 注重环保理念，愿意为绿色产品付费<br>
+                            <strong>科技爱好者</strong> - 喜欢智能产品，追求科技生活
+                        </td>
+                        <td>
+                            <strong>家庭日常</strong> - 日常清洁、美容、健康监测<br>
+                            <strong>户外活动</strong> - 携带宠物外出时的护理需求<br>
+                            <strong>旅行场景</strong> - 宠物旅行时的便携护理<br>
+                            <strong>社交聚会</strong> - 宠物聚会时的护理展示<br>
+                            <strong>健康检查</strong> - 定期健康监测和护理<br>
+                            <strong>季节性护理</strong> - 换毛期、敏感期特殊护理
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 风险与预测表格 -->
+        <div class="table-section" id="riskPrediction">
+            <h2>⚠️ 风险与预测</h2>
+            <table id="riskPredictionTable">
+                <thead>
+                    <tr>
+                        <th>相似/关联产品类目</th>
+                        <th>风险评估/注意事项</th>
+                        <th>生命周期预测</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>宠物用品、宠物护理、宠物健康、智能家居设备、环保清洁用品、个人护理用品、健康监测设备、户外用品、便携设备、女性用品、生活方式产品</td>
+                        <td>
+                            <strong>生产风险</strong> - 材料成本较高，需要控制成本；质量控制严格，涉及宠物安全，质量要求极高；供应链复杂，需要稳定的环保材料供应商；技术门槛高，智能产品需要技术研发<br>
+                            <strong>营销风险</strong> - 用户教育成本高，需要教育用户正确使用和维护；季节性影响，宠物护理有季节性需求；竞争激烈，市场已有成熟品牌；价格敏感，中端产品价格敏感度较高<br>
+                            <strong>合规风险</strong> - 安全认证要求高，涉及宠物安全，需要相关认证；环保标准严格，需要符合环保要求；知识产权保护，避免侵犯他人专利；质量标准高，需要符合相关质量标准
+                        </td>
+                        <td>
+                            <strong>新品期</strong> (0-6个月) - 市场教育、用户反馈收集、产品优化<br>
+                            <strong>成长期</strong> (6-18个月) - 产品迭代、市场扩张、品牌建设<br>
+                            <strong>成熟期</strong> (18-36个月) - 品牌建设、渠道拓展、技术升级<br>
+                            <strong>衰退期</strong> (36个月+) - 产品升级、新品类开发、技术革新
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+            <!-- 数据可视化区域 -->
+            <div class="chart-container" id="dataVisualization">
+                <h2 class="chart-title">📊 数据可视化分析</h2>
+                <div class="chart-grid">
+                    <div class="data-card fade-in-up">
+                        <h4>产品创意度分布</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%"></div>
+                        </div>
+                        <p>高创意产品: 60%</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 30%"></div>
+                        </div>
+                        <p>中创意产品: 30%</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 10%"></div>
+                        </div>
+                        <p>低创意产品: 10%</p>
+                    </div>
+                    
+                    <div class="data-card fade-in-up">
+                        <h4>市场潜力评估</h4>
+                        <div class="data-value">85%</div>
+                        <div class="data-label">整体市场潜力</div>
+                        <div class="rating-stars">★★★★★</div>
+                        <p class="trend-up">↗ 增长趋势良好</p>
+                    </div>
+                    
+                    <div class="data-card fade-in-up">
+                        <h4>价格区间分析</h4>
+                        <div class="data-value">¥350</div>
+                        <div class="data-label">平均目标价格</div>
+                        <p>价格范围: ¥200-500</p>
+                        <p class="trend-up">↗ 中高端定位</p>
+                    </div>
+                    
+                    <div class="data-card fade-in-up">
+                        <h4>开发难度评估</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%"></div>
+                        </div>
+                        <p>技术难度: 中等偏高</p>
+                        <div class="rating-stars">★★★☆☆</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 选品建议总结 -->
+            <div class="summary-section" id="summary">
+                <h3>🎯 选品建议总结</h3>
+                <div class="product-card fade-in-up">
+                    <h4>1. 智能宠物健康监测器 (高创意)</h4>
+                    <p><strong>核心优势:</strong> 科技感强，健康监测，APP连接</p>
+                    <p><strong>目标价格:</strong> 300-450元</p>
+                    <p><strong>开发难度:</strong> 中等（需要APP开发）</p>
+                    <p><strong>市场潜力:</strong> 高（符合年轻用户科技需求）</p>
+                    <div class="rating-stars">★★★★★</div>
+                </div>
+                <div class="product-card fade-in-up">
+                    <h4>2. 多功能宠物护理套装 (高创意)</h4>
+                    <p><strong>核心优势:</strong> 多功能性，模块化设计，性价比高</p>
+                    <p><strong>目标价格:</strong> 250-400元</p>
+                    <p><strong>开发难度:</strong> 中等（需要模块化设计）</p>
+                    <p><strong>市场潜力:</strong> 高（解决用户痛点）</p>
+                    <div class="rating-stars">★★★★☆</div>
+                </div>
+                <div class="product-card fade-in-up">
+                    <h4>3. 便携式宠物SPA设备 (高创意)</h4>
+                    <p><strong>核心优势:</strong> 专业级体验，家庭级价格</p>
+                    <p><strong>目标价格:</strong> 350-500元</p>
+                    <p><strong>开发难度:</strong> 高（需要技术突破）</p>
+                    <p><strong>市场潜力:</strong> 极高（创新产品）</p>
+                    <div class="rating-stars">★★★★★</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 检查库加载状态
+        function checkLibrariesLoaded() {
+            const libraries = {
+                'html2canvas': typeof html2canvas !== 'undefined',
+                'XLSX': typeof XLSX !== 'undefined'
+            };
+            
+            const missingLibraries = Object.keys(libraries).filter(lib => !libraries[lib]);
+            
+            let message = '📚 库加载状态检查:\n\n';
+            
+            Object.keys(libraries).forEach(lib => {
+                const status = libraries[lib] ? '✅ 已加载' : '❌ 未加载';
+                message += `${lib}: ${status}\n`;
+            });
+            
+            if (missingLibraries.length > 0) {
+                message += `\n⚠️ 缺少库: ${missingLibraries.join(', ')}\n`;
+                message += '请刷新页面后重试，或检查网络连接。';
+                console.warn('以下库未加载:', missingLibraries);
+            } else {
+                message += '\n🎉 所有库已正确加载！';
+                console.log('所有库已加载完成');
+            }
+            
+            alert(message);
+            return missingLibraries.length === 0;
+        }
+        
+        // 页面加载完成后检查库状态（静默检查）
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            setTimeout(() => {
+                const libraries = {
+                    'html2canvas': typeof html2canvas !== 'undefined',
+                    'XLSX': typeof XLSX !== 'undefined'
+                };
+                
+                const missingLibraries = Object.keys(libraries).filter(lib => !libraries[lib]);
+                
+                if (missingLibraries.length > 0) {
+                    console.warn('以下库未加载:', missingLibraries);
+                    console.warn('某些导出功能可能不可用，请点击"检查库状态"按钮获取详细信息');
+                } else {
+                    console.log('所有库已加载完成');
+                }
+            }, 2000); // 等待2秒让库完全加载
+        });
+        
+        
+
+        // 主题选择功能
+        function changeTheme(theme) {
+            const body = document.body;
+            const themeSelector = document.querySelector('.theme-selector select');
+            
+            if (theme === 'light') {
+                body.removeAttribute('data-theme');
+            } else {
+                body.setAttribute('data-theme', theme);
+            }
+            
+            localStorage.setItem('theme', theme);
+            themeSelector.value = theme;
+        }
+
+        // 字体设置功能
+        function changeFontSize(delta) {
+            const currentSize = parseInt(document.documentElement.style.fontSize) || 14;
+            const newSize = Math.max(12, Math.min(20, currentSize + delta));
+            document.documentElement.style.fontSize = newSize + 'px';
+            document.getElementById('font-size-display').textContent = newSize + 'px';
+            localStorage.setItem('fontSize', newSize);
+        }
+
+        function changeFontFamily(fontFamily) {
+            const fontMap = {
+                'system': '-apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", Arial, sans-serif',
+                'apple': '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", sans-serif',
+                'microsoft': '"Microsoft YaHei", "微软雅黑", Arial, sans-serif',
+                'arial': 'Arial, sans-serif',
+                'times': '"Times New Roman", serif'
+            };
+            document.body.style.fontFamily = fontMap[fontFamily];
+            localStorage.setItem('fontFamily', fontFamily);
+        }
+
+        // 页面加载时应用保存的设置
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeSelector = document.querySelector('.theme-selector select');
+            
+            if (savedTheme) {
+                if (savedTheme === 'light') {
+                    document.body.removeAttribute('data-theme');
+                    themeIcon.textContent = '🌙';
+                } else {
+                    document.body.setAttribute('data-theme', savedTheme);
+                    if (savedTheme === 'dark') {
+                        themeIcon.textContent = '☀️';
+                    } else if (savedTheme === 'high-contrast') {
+                        themeIcon.textContent = '🔆';
+                    } else if (savedTheme === 'blog') {
+                        themeIcon.textContent = '📝';
+                    }
+                }
+                themeSelector.value = savedTheme;
+            } else {
+                themeIcon.textContent = '🌙';
+            }
+
+            // 应用保存的字体设置
+            const savedFontSize = localStorage.getItem('fontSize');
+            if (savedFontSize) {
+                document.documentElement.style.fontSize = savedFontSize + 'px';
+                document.getElementById('font-size-display').textContent = savedFontSize + 'px';
+            }
+
+            const savedFontFamily = localStorage.getItem('fontFamily');
+            if (savedFontFamily) {
+                changeFontFamily(savedFontFamily);
+                document.querySelector('.font-family-select').value = savedFontFamily;
+            }
+
+            // 添加滚动动画
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // 观察所有需要动画的元素
+            document.querySelectorAll('.fade-in-up, .slide-in-left').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+
+        function exportToExcel() {
+            // 创建Excel文件，包含多个工作表
+            const wb = XLSX.utils.book_new();
+            
+            // 添加各个表格
+            const basicInfoTable = document.getElementById('basicInfoTable');
+            const basicInfoWs = XLSX.utils.table_to_sheet(basicInfoTable);
+            XLSX.utils.book_append_sheet(wb, basicInfoWs, "产品基本信息");
+            
+            const designInfoTable = document.getElementById('designInfoTable');
+            const designInfoWs = XLSX.utils.table_to_sheet(designInfoTable);
+            XLSX.utils.book_append_sheet(wb, designInfoWs, "产品设计与发展");
+            
+            const productMarketingTable = document.getElementById('productMarketingTable');
+            const productMarketingWs = XLSX.utils.table_to_sheet(productMarketingTable);
+            XLSX.utils.book_append_sheet(wb, productMarketingWs, "产品建议与营销");
+            
+            const platformMarketTable = document.getElementById('platformMarketTable');
+            const platformMarketWs = XLSX.utils.table_to_sheet(platformMarketTable);
+            XLSX.utils.book_append_sheet(wb, platformMarketWs, "平台与市场分析");
+            
+            const riskPredictionTable = document.getElementById('riskPredictionTable');
+            const riskPredictionWs = XLSX.utils.table_to_sheet(riskPredictionTable);
+            XLSX.utils.book_append_sheet(wb, riskPredictionWs, "风险与预测");
+            
+            // 下载文件
+            XLSX.writeFile(wb, '宠物护理产品选品分析表格.xlsx');
+        }
+
+        function exportToImage() {
+            // 检查html2canvas是否加载
+            if (typeof html2canvas === 'undefined') {
+                alert('图片生成库未加载，请刷新页面后重试');
+                return;
+            }
+            
+            // 显示加载提示
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ 生成中...';
+            button.disabled = true;
+            
+            // 导出单个表格为图片
+            const table = document.getElementById('basicInfoTable');
+            if (!table) {
+                alert('未找到表格');
+                button.textContent = originalText;
+                button.disabled = false;
+                return;
+            }
+            
+            exportTableAsImage(table, '产品基本信息表格.png', button, originalText);
+        }
+
+        function exportToMultipleImages() {
+            // 检查html2canvas是否加载
+            if (typeof html2canvas === 'undefined') {
+                alert('图片生成库未加载，请刷新页面后重试');
+                return;
+            }
+            
+            // 显示加载提示
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ 批量生成中...';
+            button.disabled = true;
+            
+            // 导出多个表格为图片
+            const tables = [
+                { id: 'basicInfoTable', name: '产品基本信息表格' },
+                { id: 'designInfoTable', name: '产品设计与发展表格' },
+                { id: 'productMarketingTable', name: '产品建议与营销表格' },
+                { id: 'platformMarketTable', name: '平台与市场分析表格' },
+                { id: 'riskPredictionTable', name: '风险与预测表格' }
+            ];
+            
+            let completedCount = 0;
+            const totalCount = tables.length;
+            
+            tables.forEach((table, index) => {
+                setTimeout(() => {
+                    const tableElement = document.getElementById(table.id);
+                    if (tableElement) {
+                        exportTableAsImage(tableElement, table.name + '.png', null, null);
+                        completedCount++;
+                        
+                        // 更新按钮状态
+                        button.textContent = `⏳ 批量生成中... (${completedCount}/${totalCount})`;
+                        
+                        // 所有表格处理完成
+                        if (completedCount === totalCount) {
+                            setTimeout(() => {
+                                button.textContent = originalText;
+                                button.disabled = false;
+                                alert('所有表格图片已生成完成！');
+                            }, 1000);
+                        }
+                    } else {
+                        console.warn('未找到表格:', table.id);
+                        completedCount++;
+                        
+                        if (completedCount === totalCount) {
+                            button.textContent = originalText;
+                            button.disabled = false;
+                        }
+                    }
+                }, index * 1500); // 延迟1.5秒，避免同时处理
+            });
+        }
+
+        function exportToFullImage() {
+            // 检查html2canvas是否加载
+            if (typeof html2canvas === 'undefined') {
+                alert('图片生成库未加载，请刷新页面后重试');
+                return;
+            }
+            
+            // 显示加载提示
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ 生成中...';
+            button.disabled = true;
+            
+            // 设置超时保护
+            const timeoutId = setTimeout(() => {
+                button.textContent = '❌ 生成超时';
+                button.disabled = false;
+                alert('图片生成超时，请尝试分段导出或刷新页面后重试');
+            }, 30000); // 30秒超时
+            
+            try {
+                // 导出整张大图 - 使用更简单的方法
+                const container = document.querySelector('.container');
+                
+                if (!container) {
+                    clearTimeout(timeoutId);
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    alert('未找到容器元素');
+                    return;
+                }
+                
+                // 滚动到顶部确保完整内容
+                window.scrollTo(0, 0);
+                
+                // 等待页面稳定
+                setTimeout(() => {
+                    console.log('开始生成整张大图...');
+                    console.log('容器尺寸:', container.scrollWidth, 'x', container.scrollHeight);
+                    
+                    // 使用更保守的设置，确保捕获完整内容
+                    html2canvas(container, {
+                        backgroundColor: '#ffffff',
+                        scale: 1.2, // 进一步降低缩放比例
+                        useCORS: true,
+                        allowTaint: true,
+                        logging: true, // 开启日志便于调试
+                        removeContainer: false,
+                        imageTimeout: 20000, // 增加图片加载超时
+                        scrollX: 0,
+                        scrollY: 0,
+                        width: container.scrollWidth,
+                        height: container.scrollHeight,
+                        windowWidth: container.scrollWidth,
+                        windowHeight: container.scrollHeight,
+                        onclone: function(clonedDoc) {
+                            console.log('克隆文档完成');
+                            // 确保克隆的文档样式正确
+                            const clonedContainer = clonedDoc.querySelector('.container');
+                            if (clonedContainer) {
+                                clonedContainer.style.position = 'static';
+                                clonedContainer.style.transform = 'none';
+                                clonedContainer.style.overflow = 'visible';
+                                clonedContainer.style.height = 'auto';
+                                clonedContainer.style.minHeight = '100%';
+                            }
+                            
+                            // 确保所有字体都正确加载
+                            const allElements = clonedDoc.querySelectorAll('*');
+                            allElements.forEach(el => {
+                                el.style.fontFamily = 'Microsoft YaHei, Arial, sans-serif';
+                                el.style.visibility = 'visible';
+                                el.style.opacity = '1';
+                            });
+                            
+                            // 确保底部内容可见
+                            const bottomElements = clonedDoc.querySelectorAll('.summary-section, .product-card, .font-controls');
+                            bottomElements.forEach(el => {
+                                el.style.display = 'block';
+                                el.style.visibility = 'visible';
+                                el.style.opacity = '1';
+                            });
+                        }
+                    }).then(canvas => {
+                        clearTimeout(timeoutId);
+                        console.log('Canvas生成完成，尺寸:', canvas.width, 'x', canvas.height);
+                        
+                        // 下载图片
+                        const link = document.createElement('a');
+                        link.download = '宠物护理产品选品分析完整表格.png';
+                        link.href = canvas.toDataURL('image/png', 0.9);
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        // 恢复按钮状态
+                        button.textContent = originalText;
+                        button.disabled = false;
+                        
+                        console.log('整张大图导出成功');
+                        alert('整张大图导出成功！');
+                    }).catch(error => {
+                        clearTimeout(timeoutId);
+                        console.error('图片生成失败:', error);
+                        alert('图片生成失败: ' + error.message + '\n\n建议：\n1. 尝试刷新页面后重试\n2. 使用"下载多个表格图片"功能\n3. 检查网络连接');
+                        
+                        // 恢复按钮状态
+                        button.textContent = originalText;
+                        button.disabled = false;
+                    });
+                }, 1000); // 增加等待时间
+                
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('导出过程出错:', error);
+                alert('导出过程出错: ' + error.message);
+                
+                // 恢复按钮状态
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        // 完整内容导出 - 专门处理长页面和底部内容
+        function exportToFullImageFixed() {
+            // 检查html2canvas是否加载
+            if (typeof html2canvas === 'undefined') {
+                alert('图片生成库未加载，请刷新页面后重试');
+                return;
+            }
+            
+            // 显示加载提示
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ 完整内容生成中...';
+            button.disabled = true;
+            
+            // 设置超时保护
+            const timeoutId = setTimeout(() => {
+                button.textContent = '❌ 生成超时';
+                button.disabled = false;
+                alert('图片生成超时，请尝试分段导出或刷新页面后重试');
+            }, 60000); // 60秒超时
+            
+            try {
+                // 滚动到页面底部确保所有内容都加载
+                window.scrollTo(0, document.body.scrollHeight);
+                
+                // 等待页面完全加载
+                setTimeout(() => {
+                    // 创建临时容器
+                    const tempContainer = document.createElement('div');
+                    tempContainer.style.position = 'absolute';
+                    tempContainer.style.left = '-9999px';
+                    tempContainer.style.top = '0';
+                    tempContainer.style.width = '1000px';
+                    tempContainer.style.backgroundColor = '#ffffff';
+                    tempContainer.style.padding = '30px';
+                    tempContainer.style.fontFamily = 'Microsoft YaHei, Arial, sans-serif';
+                    tempContainer.style.overflow = 'visible';
+                    tempContainer.style.lineHeight = '1.6';
+                    
+                    // 获取原始容器的所有内容
+                    const originalContainer = document.querySelector('.container');
+                    const clonedContainer = originalContainer.cloneNode(true);
+                    
+                    // 完全重置样式
+                    clonedContainer.style.cssText = `
+                        position: static !important;
+                        transform: none !important;
+                        overflow: visible !important;
+                        height: auto !important;
+                        width: 100% !important;
+                        max-width: none !important;
+                        margin: 0 !important;
+                        padding: 20px !important;
+                        background: #ffffff !important;
+                        font-family: Microsoft YaHei, Arial, sans-serif !important;
+                    `;
+                    
+                    // 强制显示所有内容
+                    const allElements = clonedContainer.querySelectorAll('*');
+                    allElements.forEach(el => {
+                        el.style.cssText += `
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            display: ${el.style.display === 'none' ? 'block' : el.style.display} !important;
+                            position: ${el.style.position === 'fixed' ? 'static' : el.style.position} !important;
+                            transform: none !important;
+                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                        `;
+                    });
+                    
+                    // 特别处理底部内容区域
+                    const bottomElements = clonedContainer.querySelectorAll(`
+                        .summary-section, 
+                        .product-card, 
+                        .font-controls, 
+                        .theme-selector,
+                        .export-btn-group,
+                        .section-title,
+                        .data-card,
+                        .chart-container
+                    `);
+                    
+                    bottomElements.forEach(el => {
+                        el.style.cssText += `
+                            display: block !important;
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            position: static !important;
+                            transform: none !important;
+                            margin: 10px 0 !important;
+                            padding: 15px !important;
+                            background: #ffffff !important;
+                            border: 1px solid #ddd !important;
+                            border-radius: 8px !important;
+                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                        `;
+                    });
+                    
+                    // 确保表格正确显示
+                    const tables = clonedContainer.querySelectorAll('table');
+                    tables.forEach(table => {
+                        table.style.cssText += `
+                            width: 100% !important;
+                            border-collapse: collapse !important;
+                            margin: 10px 0 !important;
+                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                        `;
+                        
+                        const cells = table.querySelectorAll('th, td');
+                        cells.forEach(cell => {
+                            cell.style.cssText += `
+                                border: 1px solid #ddd !important;
+                                padding: 8px !important;
+                                text-align: left !important;
+                                vertical-align: top !important;
+                                font-family: Microsoft YaHei, Arial, sans-serif !important;
+                                background: #ffffff !important;
+                            `;
+                        });
+                    });
+                    
+                    // 添加完整的样式表
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        * { 
+                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            box-sizing: border-box !important;
+                        }
+                        body, html { margin: 0 !important; padding: 0 !important; }
+                        .container { 
+                            position: static !important;
+                            transform: none !important;
+                            overflow: visible !important;
+                            height: auto !important;
+                            width: 100% !important;
+                            background: #ffffff !important;
+                        }
+                        .main-layout {
+                            display: block !important;
+                            grid-template-columns: none !important;
+                        }
+                        .sidebar, .content-area {
+                            position: static !important;
+                            width: 100% !important;
+                            margin: 10px 0 !important;
+                        }
+                        .summary-section, .product-card, .font-controls, .theme-selector {
+                            display: block !important;
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            position: static !important;
+                            transform: none !important;
+                            margin: 15px 0 !important;
+                            padding: 15px !important;
+                            background: #ffffff !important;
+                            border: 1px solid #ddd !important;
+                            border-radius: 8px !important;
+                        }
+                        h1, h2, h3, h4, h5, h6 {
+                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                            color: #333 !important;
+                            margin: 10px 0 !important;
+                        }
+                        p, span, div {
+                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                            color: #333 !important;
+                        }
+                    `;
+                    
+                    tempContainer.appendChild(style);
+                    tempContainer.appendChild(clonedContainer);
+                    document.body.appendChild(tempContainer);
+                    
+                    // 再次等待确保内容完全渲染
+                    setTimeout(() => {
+                        console.log('开始生成完整内容图片...');
+                        console.log('临时容器尺寸:', tempContainer.scrollWidth, 'x', tempContainer.scrollHeight);
+                        
+                        // 使用更稳定的html2canvas设置
+                        html2canvas(tempContainer, {
+                            backgroundColor: '#ffffff',
+                            scale: 0.8, // 降低缩放比例提高稳定性
+                            useCORS: true,
+                            allowTaint: true,
+                            logging: false,
+                            removeContainer: false,
+                            imageTimeout: 30000,
+                            width: tempContainer.scrollWidth,
+                            height: tempContainer.scrollHeight,
+                            scrollX: 0,
+                            scrollY: 0,
+                            windowWidth: tempContainer.scrollWidth,
+                            windowHeight: tempContainer.scrollHeight,
+                            foreignObjectRendering: false // 禁用外部对象渲染
+                        }).then(canvas => {
+                            clearTimeout(timeoutId);
+                            console.log('完整内容Canvas生成完成，尺寸:', canvas.width, 'x', canvas.height);
+                            
+                            // 下载图片
+                            const link = document.createElement('a');
+                            link.download = '宠物护理产品选品分析完整内容.png';
+                            link.href = canvas.toDataURL('image/png', 0.9);
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            
+                            // 清理临时容器
+                            document.body.removeChild(tempContainer);
+                            
+                            // 恢复按钮状态
+                            button.textContent = originalText;
+                            button.disabled = false;
+                            
+                            console.log('完整内容导出成功');
+                            alert('完整内容导出成功！包含所有底部字体内容。');
+                        }).catch(error => {
+                            clearTimeout(timeoutId);
+                            console.error('完整内容生成失败:', error);
+                            alert('完整内容生成失败: ' + error.message + '\n\n建议：\n1. 尝试刷新页面后重试\n2. 使用"分段导出大图"功能\n3. 检查网络连接');
+                            
+                            // 清理临时容器
+                            document.body.removeChild(tempContainer);
+                            
+                            // 恢复按钮状态
+                            button.textContent = originalText;
+                            button.disabled = false;
+                        });
+                    }, 3000); // 等待3秒让内容完全稳定
+                    
+                }, 1000); // 等待1秒让页面滚动完成
+                
+            } catch (error) {
+                clearTimeout(timeoutId);
+                console.error('完整内容导出过程出错:', error);
+                alert('完整内容导出过程出错: ' + error.message);
+                
+                // 恢复按钮状态
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        // 分段导出大图 - 备用方案
+        function exportToFullImageAlternative() {
+            // 检查html2canvas是否加载
+            if (typeof html2canvas === 'undefined') {
+                alert('图片生成库未加载，请刷新页面后重试');
+                return;
+            }
+            
+            // 显示加载提示
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '⏳ 分段生成中...';
+            button.disabled = true;
+            
+            try {
+                // 滚动到页面底部确保所有内容都加载
+                window.scrollTo(0, document.body.scrollHeight);
+                
+                // 等待页面稳定
+                setTimeout(() => {
+                    // 获取所有主要部分，包括底部内容
+                    const sections = [
+                        { selector: '.sidebar', name: '侧边栏' },
+                        { selector: '.content-area', name: '主内容区' },
+                        { selector: '.summary-section', name: '选品建议总结' },
+                        { selector: '.font-controls', name: '字体设置' },
+                        { selector: '.theme-selector', name: '主题选择器' }
+                    ];
+                    
+                    let completedCount = 0;
+                    const totalSections = sections.length;
+                    
+                    sections.forEach((section, index) => {
+                        setTimeout(() => {
+                            const element = document.querySelector(section.selector);
+                            if (element) {
+                                console.log(`开始生成 ${section.name}...`);
+                                
+                                // 创建临时容器确保完整内容
+                                const tempContainer = document.createElement('div');
+                                tempContainer.style.position = 'absolute';
+                                tempContainer.style.left = '-9999px';
+                                tempContainer.style.top = '0';
+                                tempContainer.style.width = '800px';
+                                tempContainer.style.backgroundColor = '#ffffff';
+                                tempContainer.style.padding = '20px';
+                                tempContainer.style.fontFamily = 'Microsoft YaHei, Arial, sans-serif';
+                                tempContainer.style.overflow = 'visible';
+                                
+                                // 克隆元素
+                                const clonedElement = element.cloneNode(true);
+                                
+                                // 重置样式确保完整显示
+                                clonedElement.style.cssText = `
+                                    position: static !important;
+                                    transform: none !important;
+                                    overflow: visible !important;
+                                    height: auto !important;
+                                    width: 100% !important;
+                                    max-width: none !important;
+                                    margin: 0 !important;
+                                    padding: 15px !important;
+                                    background: #ffffff !important;
+                                    font-family: Microsoft YaHei, Arial, sans-serif !important;
+                                `;
+                                
+                                // 确保所有子元素可见
+                                const allElements = clonedElement.querySelectorAll('*');
+                                allElements.forEach(el => {
+                                    el.style.cssText += `
+                                        visibility: visible !important;
+                                        opacity: 1 !important;
+                                        display: ${el.style.display === 'none' ? 'block' : el.style.display} !important;
+                                        position: static !important;
+                                        transform: none !important;
+                                        font-family: Microsoft YaHei, Arial, sans-serif !important;
+                                    `;
+                                });
+                                
+                                // 特别处理表格
+                                const tables = clonedElement.querySelectorAll('table');
+                                tables.forEach(table => {
+                                    table.style.cssText += `
+                                        width: 100% !important;
+                                        border-collapse: collapse !important;
+                                        margin: 10px 0 !important;
+                                        font-family: Microsoft YaHei, Arial, sans-serif !important;
+                                    `;
+                                    
+                                    const cells = table.querySelectorAll('th, td');
+                                    cells.forEach(cell => {
+                                        cell.style.cssText += `
+                                            border: 1px solid #ddd !important;
+                                            padding: 8px !important;
+                                            text-align: left !important;
+                                            vertical-align: top !important;
+                                            font-family: Microsoft YaHei, Arial, sans-serif !important;
+                                            background: #ffffff !important;
+                                        `;
+                                    });
+                                });
+                                
+                                tempContainer.appendChild(clonedElement);
+                                document.body.appendChild(tempContainer);
+                                
+                                html2canvas(tempContainer, {
+                                    backgroundColor: '#ffffff',
+                                    scale: 1.0,
+                                    useCORS: true,
+                                    allowTaint: true,
+                                    logging: false,
+                                    imageTimeout: 15000,
+                                    width: tempContainer.scrollWidth,
+                                    height: tempContainer.scrollHeight,
+                                    scrollX: 0,
+                                    scrollY: 0,
+                                    windowWidth: tempContainer.scrollWidth,
+                                    windowHeight: tempContainer.scrollHeight
+                                }).then(canvas => {
+                                    const link = document.createElement('a');
+                                    link.download = `宠物护理产品选品分析-${section.name}.png`;
+                                    link.href = canvas.toDataURL('image/png', 0.9);
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                    
+                                    // 清理临时容器
+                                    document.body.removeChild(tempContainer);
+                                    
+                                    completedCount++;
+                                    console.log(`${section.name} 导出完成 (${completedCount}/${totalSections})`);
+                                    
+                                    if (completedCount === totalSections) {
+                                        button.textContent = originalText;
+                                        button.disabled = false;
+                                        alert('分段导出完成！已生成 ' + totalSections + ' 个图片文件。');
+                                    }
+                                }).catch(error => {
+                                    console.error(`${section.name} 导出失败:`, error);
+                                    
+                                    // 清理临时容器
+                                    document.body.removeChild(tempContainer);
+                                    
+                                    completedCount++;
+                                    
+                                    if (completedCount === totalSections) {
+                                        button.textContent = originalText;
+                                        button.disabled = false;
+                                        alert('分段导出完成，部分文件可能生成失败。');
+                                    }
+                                });
+                            } else {
+                                console.warn(`未找到元素: ${section.selector}`);
+                                completedCount++;
+                                
+                                if (completedCount === totalSections) {
+                                    button.textContent = originalText;
+                                    button.disabled = false;
+                                }
+                            }
+                        }, index * 3000); // 每3秒处理一个部分
+                    });
+                    
+                }, 1000); // 等待1秒让页面滚动完成
+                
+            } catch (error) {
+                console.error('分段导出过程出错:', error);
+                alert('分段导出过程出错: ' + error.message);
+                
+                // 恢复按钮状态
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        function exportTableAsImage(table, filename, button = null, originalText = null) {
+            // 创建临时容器
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.backgroundColor = 'white';
+            tempContainer.style.padding = '20px';
+            tempContainer.style.fontFamily = 'Microsoft YaHei, Arial, sans-serif';
+            
+            // 复制表格
+            const clonedTable = table.cloneNode(true);
+            clonedTable.style.width = '100%';
+            clonedTable.style.borderCollapse = 'collapse';
+            clonedTable.style.fontSize = '12px';
+            
+            // 设置表格样式
+            const style = document.createElement('style');
+            style.textContent = `
+                table { border-collapse: collapse; width: 100%; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+                th { background-color: #366092; color: white; font-weight: bold; }
+                tr:nth-child(even) { background-color: #f9f9f9; }
+                .high-priority { background-color: #d4edda; font-weight: bold; }
+                .medium-priority { background-color: #fff3cd; }
+                .low-priority { background-color: #f8d7da; }
+                .high-creativity { background-color: #d1ecf1; font-weight: bold; }
+                .medium-creativity { background-color: #e2e3e5; }
+                .low-creativity { background-color: #f8f9fa; }
+            `;
+            
+            tempContainer.appendChild(style);
+            tempContainer.appendChild(clonedTable);
+            document.body.appendChild(tempContainer);
+            
+            // 使用html2canvas转换为图片
+            html2canvas(tempContainer, {
+                backgroundColor: 'white',
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                width: tempContainer.scrollWidth,
+                height: tempContainer.scrollHeight,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = canvas.toDataURL('image/png', 1.0);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                document.body.removeChild(tempContainer);
+                
+                // 恢复按钮状态
+                if (button && originalText) {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }
+                
+                console.log('表格图片导出成功:', filename);
+            }).catch(error => {
+                console.error('图片生成失败:', error);
+                alert('图片生成失败: ' + error.message);
+                document.body.removeChild(tempContainer);
+                
+                // 恢复按钮状态
+                if (button && originalText) {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }
+            });
+        }
+    </script>
+    
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- 引入html2canvas库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</body>
+</html>

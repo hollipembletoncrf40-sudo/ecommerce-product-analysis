@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力量训练配件选品分析表格</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #366092;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+        .export-btn:hover {
+            background-color: #218838;
+        }
+        .summary {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .summary h3 {
+            color: #366092;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏋️ 力量训练配件选品分析表格</h1>
+        
+        <button class="export-btn" onclick="exportToExcel()">📊 导出为Excel</button>
+        <button class="export-btn" onclick="window.print()">🖨️ 打印表格</button>
+        
+        <table id="analysisTable">
+            <thead>
+                <tr>
+                    <th>基础产品名称</th>
+                    <th>核心功能/卖点</th>
+                    <th>用户输入场景</th>
+                    <th>核心受众群体</th>
+                    <th>用户输入兴趣爱好</th>
+                    <th>主题/IP关联</th>
+                    <th>文化背景</th>
+                    <th>材质/工艺创新方向</th>
+                    <th>设计风格</th>
+                    <th>潜在产品建议1 (创意度: [标签])</th>
+                    <th>潜在产品建议2 (创意度: [标签])</th>
+                    <th>潜在产品建议3 (创意度: [标签])</th>
+                    <th>营销亮点1 (优先级: [标签])</th>
+                    <th>营销亮点2 (优先级: [标签])</th>
+                    <th>营销亮点3 (优先级: [标签])</th>
+                    <th>目标平台建议1 (平台: [名称], 理由: [详细说明])</th>
+                    <th>目标平台建议2 (平台: [名称], 理由: [详细说明])</th>
+                    <th>目标平台建议3 (平台: [名称], 理由: [详细说明])</th>
+                    <th>目标受众细分</th>
+                    <th>潜在使用场景拓展</th>
+                    <th>相似/关联产品类目</th>
+                    <th>风险评估/注意事项</th>
+                    <th>生命周期预测</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>户外便携力量训练配件</strong></td>
+                    <td>
+                        <strong>1. 便携收纳</strong> - 可折叠、可拆卸、轻量化设计<br>
+                        <strong>2. 多功能性</strong> - 一物多用，适应多种训练动作<br>
+                        <strong>3. 户外适配</strong> - 防水、防锈、适应不同地形<br>
+                        <strong>4. 强度调节</strong> - 可调节阻力/重量，满足不同训练需求<br>
+                        <strong>5. 安全保护</strong> - 防滑设计、缓冲保护、稳定支撑
+                    </td>
+                    <td>户外运动（公园、海滩、旅行等）</td>
+                    <td>18-25岁男性力量训练爱好者</td>
+                    <td>健身、户外运动、科技、潮流文化</td>
+                    <td>
+                        <strong>硬核健身文化</strong> - 强调"街头健身"、"徒手健身"概念<br>
+                        <strong>户外探险精神</strong> - 与登山、露营、极限运动关联<br>
+                        <strong>科技健身</strong> - 智能计数、数据记录、APP连接<br>
+                        <strong>潮流运动</strong> - 与街头文化、滑板、跑酷等年轻文化结合
+                    </td>
+                    <td>
+                        <strong>街头健身文化</strong> - 起源于俄罗斯的街头健身运动<br>
+                        <strong>户外运动热潮</strong> - 疫情后户外运动需求激增<br>
+                        <strong>男性健身文化</strong> - 强调力量、肌肉、阳刚气质<br>
+                        <strong>社交媒体健身</strong> - Instagram、TikTok健身内容流行
+                    </td>
+                    <td>
+                        <strong>轻量化材料</strong> - 碳纤维、航空铝材、钛合金<br>
+                        <strong>环保材质</strong> - 可回收塑料、竹制配件<br>
+                        <strong>智能材料</strong> - 记忆泡沫、自修复涂层<br>
+                        <strong>耐用工艺</strong> - 阳极氧化、粉末喷涂、激光切割
+                    </td>
+                    <td>
+                        <strong>工业风</strong> - 金属质感、几何线条、简约设计<br>
+                        <strong>运动科技风</strong> - 流线型、LED灯效、数字显示<br>
+                        <strong>军事风</strong> - 迷彩配色、战术设计、多功能性<br>
+                        <strong>极简风</strong> - 纯色设计、隐藏式功能、一体化结构
+                    </td>
+                    <td>
+                        <strong>智能悬挂训练带套装 (高创意)</strong><br>
+                        集成蓝牙传感器，实时监测训练数据，APP指导动作，支持多种训练模式，防水设计，适合户外使用。
+                    </td>
+                    <td>
+                        <strong>模块化户外杠铃 (高创意)</strong><br>
+                        可拆分为多个配件，组合成不同训练器械，重量可调节，便携收纳，适应不同训练需求。
+                    </td>
+                    <td>
+                        <strong>便携式阻力训练器 (高创意)</strong><br>
+                        利用气压原理，无重量片设计，体积小重量大，可调节阻力，适合各种力量训练动作。
+                    </td>
+                    <td>
+                        <strong>"随时随地练出肌肉" (高优先级)</strong><br>
+                        强调便携性和效果，突出产品核心价值，吸引目标用户群体。
+                    </td>
+                    <td>
+                        <strong>"户外健身新体验" (高优先级)</strong><br>
+                        突出场景创新和新鲜感，与室内健身形成差异化，满足用户新需求。
+                    </td>
+                    <td>
+                        <strong>"专业级训练效果" (高优先级)</strong><br>
+                        强调产品专业性和训练效果，建立用户信任，提升产品价值感。
+                    </td>
+                    <td>
+                        <strong>亚马逊 (平台: Amazon)</strong><br>
+                        <em>理由:</em> 流量大、用户信任度高、适合中端价位产品，有完善的物流和售后服务，用户评价系统完善，适合建立品牌信誉
+                    </td>
+                    <td>
+                        <strong>TikTok Shop (平台: TikTok)</strong><br>
+                        <em>理由:</em> 年轻用户集中、短视频营销效果好、健身内容热门，用户粘性高，适合快速传播和用户教育
+                    </td>
+                    <td>
+                        <strong>独立站 (平台: 自建网站)</strong><br>
+                        <em>理由:</em> 品牌建设、用户数据收集、利润空间大，可建立用户社区，提供个性化服务，长期品牌价值
+                    </td>
+                    <td>
+                        <strong>健身新手</strong> - 18-22岁，刚开始健身，需要简单易用的产品<br>
+                        <strong>健身进阶</strong> - 22-25岁，有一定基础，追求专业性和效果<br>
+                        <strong>户外运动爱好者</strong> - 喜欢户外活动，需要便携的健身解决方案<br>
+                        <strong>科技健身用户</strong> - 喜欢智能设备，追求数据化和科技感
+                    </td>
+                    <td>
+                        <strong>旅行健身</strong> - 出差、旅游时的健身需求<br>
+                        <strong>户外聚会</strong> - 朋友聚会时的健身娱乐<br>
+                        <strong>校园健身</strong> - 大学生宿舍、校园健身<br>
+                        <strong>家庭健身</strong> - 居家健身的补充设备<br>
+                        <strong>团队训练</strong> - 多人协作训练场景
+                    </td>
+                    <td>健身器材、运动配件、户外装备、智能穿戴设备、运动监测设备、健身服装、运动鞋、护具、营养补剂、健身食品、健身APP、在线课程</td>
+                    <td>
+                        <strong>生产风险</strong> - 材料成本控制、质量控制、供应链管理<br>
+                        <strong>营销风险</strong> - 竞争激烈、用户教育成本高、季节性影响<br>
+                        <strong>合规风险</strong> - 产品安全认证、环保标准、知识产权保护<br>
+                        <strong>市场风险</strong> - 用户需求变化、技术更新、价格竞争
+                    </td>
+                    <td>
+                        <strong>新品期</strong> (0-6个月) - 市场教育、用户反馈收集<br>
+                        <strong>成长期</strong> (6-18个月) - 产品优化、市场扩张<br>
+                        <strong>成熟期</strong> (18-36个月) - 品牌建设、渠道拓展<br>
+                        <strong>衰退期</strong> (36个月+) - 产品升级、新品类开发
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="summary">
+            <h3>📋 选品建议总结</h3>
+            <p><strong>基于您的需求，推荐以下3个高创意度产品作为重点开发方向：</strong></p>
+            <ul>
+                <li><strong>智能悬挂训练带套装</strong> - 科技感强，数据化训练，APP指导 (300-450元)</li>
+                <li><strong>模块化户外杠铃</strong> - 多功能性，便携性强，适应性强 (250-400元)</li>
+                <li><strong>便携式阻力训练器</strong> - 创新原理，体积小重量大，易携带 (200-350元)</li>
+            </ul>
+            <p><strong>营销策略建议：</strong></p>
+            <ul>
+                <li><strong>主推平台：</strong> TikTok Shop（年轻用户集中）</li>
+                <li><strong>辅助平台：</strong> 亚马逊（建立品牌信誉）</li>
+                <li><strong>长期规划：</strong> 独立站（品牌建设）</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function exportToExcel() {
+            // 创建Excel文件
+            const table = document.getElementById('analysisTable');
+            const wb = XLSX.utils.table_to_book(table, {sheet: "选品分析"});
+            
+            // 设置列宽
+            const ws = wb.Sheets["选品分析"];
+            const colWidths = [];
+            for (let i = 0; i < 23; i++) {
+                colWidths.push({wch: 20});
+            }
+            ws['!cols'] = colWidths;
+            
+            // 下载文件
+            XLSX.writeFile(wb, '力量训练配件选品分析.xlsx');
+        }
+    </script>
+    
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>

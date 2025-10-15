@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品分类表格</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+            word-wrap: break-word;
+        }
+        th {
+            background-color: #366092;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f8ff;
+        }
+        .export-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 10px 5px;
+        }
+        .export-btn:hover {
+            background-color: #218838;
+        }
+        .section-title {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .section-title h3 {
+            color: #366092;
+            margin-top: 0;
+        }
+        .product-count {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 产品分类表格</h1>
+        
+        <button class="export-btn" onclick="exportToExcel()">📊 导出为Excel</button>
+        <button class="export-btn" onclick="window.print()">🖨️ 打印表格</button>
+        
+        <div class="section-title">
+            <h3>📋 表格说明</h3>
+            <p>此表格包含20个产品分类，可用于产品选品分析的基础参考。</p>
+        </div>
+
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>产品分类</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>亚马逊设备和配件</td></tr>
+                <tr><td>亚马逊探索</td></tr>
+                <tr><td>亚马逊启动板</td></tr>
+                <tr><td>家电</td></tr>
+                <tr><td>应用程序和游戏</td></tr>
+                <tr><td>艺术、手工艺和缝纫</td></tr>
+                <tr><td>有声读物和原著</td></tr>
+                <tr><td>汽车</td></tr>
+                <tr><td>婴儿</td></tr>
+                <tr><td>美容与个人护理</td></tr>
+                <tr><td>图书</td></tr>
+                <tr><td>相机和照片产品</td></tr>
+                <tr><td>CD和黑胶唱片</td></tr>
+                <tr><td>手机及配件</td></tr>
+                <tr><td>服装、鞋履和珠宝</td></tr>
+                <tr><td>收藏货币</td></tr>
+                <tr><td>电脑及配件</td></tr>
+                <tr><td>数字教育资源</td></tr>
+                <tr><td>数字音乐</td></tr>
+                <tr><td>电子产品</td></tr>
+            </tbody>
+        </table>
+
+        <div class="product-count">
+            共包含 20 个产品分类
+        </div>
+
+        <div class="section-title">
+            <h3>💡 使用建议</h3>
+            <ul>
+                <li><strong>产品定位：</strong> 根据产品分类确定目标市场</li>
+                <li><strong>竞争分析：</strong> 分析同类产品的市场表现</li>
+                <li><strong>选品参考：</strong> 作为新品开发的分类参考</li>
+                <li><strong>市场研究：</strong> 了解不同产品类别的市场趋势</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function exportToExcel() {
+            // 创建Excel文件
+            const table = document.getElementById('productTable');
+            const wb = XLSX.utils.table_to_book(table, {sheet: "产品分类"});
+            
+            // 设置列宽
+            const ws = wb.Sheets["产品分类"];
+            const colWidths = [{wch: 30}]; // 设置列宽
+            ws['!cols'] = colWidths;
+            
+            // 下载文件
+            XLSX.writeFile(wb, '产品分类表格.xlsx');
+        }
+    </script>
+    
+    <!-- 引入SheetJS库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>
