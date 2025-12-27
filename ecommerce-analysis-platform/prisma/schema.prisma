@@ -1,0 +1,35 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+model ProductAnalysis {
+  id              String   @id @default(uuid())
+  productName     String
+  targetAudience  String
+  usageScenario   String
+  priceRange      String?
+  
+  // Core Analysis Data (Stored as JSON strings for flexibility or structured fields)
+  coreFeatures    String   // JSON: ["Feature 1", "Feature 2"]
+  marketingPoints String   // JSON: [{point: "...", priority: "HIGH"}]
+  platformAdvice  String   // JSON: [{platform: "Amazon", reason: "..."}]
+  
+  // AI Generated Content
+  fullReport      String?  // Markdown content
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ReferenceTag {
+  id       String @id @default(uuid())
+  category String // "CULTURE", "AUDIENCE", "INTEREST", "SCENE", "IP"
+  value    String
+  
+  @@unique([category, value])
+}
