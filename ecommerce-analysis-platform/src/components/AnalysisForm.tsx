@@ -18,96 +18,75 @@ export function AnalysisForm({ layout }: AnalysisFormProps) {
   const isCentered = layout === 'centered';
 
   return (
-    <form onSubmit={handleSubmit} className={isCentered ? "grid grid-cols-1 md:grid-cols-2 gap-6" : "space-y-4"}>
+    <form onSubmit={handleSubmit} className={isCentered ? "grid grid-cols-1 md:grid-cols-2 gap-8" : "space-y-5"}>
       {/* Product Name */}
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-gray-500 dark:text-gray-400">产品名称</label>
+      <div className="space-y-2">
+        <label className="text-xs font-bold text-gray-400 pl-1 tracking-[0.15em]">产品名称</label>
         <input
           type="text"
           required
           value={formData.productName}
           onChange={e => setFormData({ ...formData, productName: e.target.value })}
           placeholder="如：便携式咖啡机"
-          className="w-full px-4 py-3 text-sm bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl focus:border-indigo-400 dark:focus:border-[var(--neon-blue)] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-500/10 outline-none transition-all dark:text-white dark:placeholder-gray-600"
+          className="w-full px-5 py-4 text-sm bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl focus:bg-black/40 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all duration-300 text-white placeholder-gray-600 backdrop-blur-sm"
         />
       </div>
 
       {/* Category */}
-      <div className="space-y-1">
-        <label className="text-xs font-medium text-gray-500 dark:text-gray-400">所属类目</label>
+      <div className="space-y-2">
+        <label className="text-xs font-bold text-gray-400 pl-1 tracking-[0.15em]">所属类目</label>
         <input
           type="text"
           required
           value={formData.category}
           onChange={e => setFormData({ ...formData, category: e.target.value })}
           placeholder="如：户外装备"
-          className="w-full px-4 py-3 text-sm bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl focus:border-indigo-400 dark:focus:border-[var(--neon-blue)] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-500/10 outline-none transition-all dark:text-white dark:placeholder-gray-600"
+          className="w-full px-5 py-4 text-sm bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl focus:bg-black/40 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all duration-300 text-white placeholder-gray-600 backdrop-blur-sm"
         />
       </div>
 
-      {/* Advanced Fields Toggle for Sidebar */}
+      {/* Advanced Fields Toggle */}
       {!isCentered && (
          <button 
            type="button" 
            onClick={() => setShowAdvanced(!showAdvanced)}
-           className="w-full flex items-center justify-between text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white py-1"
+           className="w-full flex items-center justify-between text-xs font-medium text-gray-500 hover:text-white py-2 group transition-colors"
          >
-           <span>Brainstorming (Optional)</span>
-           {showAdvanced ? <ChevronUp className="w-3 h-3"/> : <ChevronDown className="w-3 h-3"/>}
+           <span>头脑风暴 (选填)</span>
+           {showAdvanced ? <ChevronUp className="w-3 h-3 group-hover:text-cyan-400 transition-colors"/> : <ChevronDown className="w-3 h-3 group-hover:text-cyan-400 transition-colors"/>}
          </button>
       )}
 
       {/* Optional Fields Container */}
       {(isCentered || showAdvanced) && (
         <>
-            {/* Pain Points */}
-            <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 dark:text-gray-400">核心痛点 (Optional)</label>
+            {/* Description - Full Width in Grid */}
+            <div className={`space-y-2 ${isCentered ? 'md:col-span-2' : ''}`}>
+                <label className="text-xs font-bold text-gray-400 pl-1 tracking-[0.15em]">补充描述</label>
                 <textarea
-                value={formData.painPoints}
-                onChange={e => setFormData({ ...formData, painPoints: e.target.value })}
-                placeholder="深度挖掘潜在痛点..."
-                className={`w-full px-4 py-3 text-sm bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl focus:border-indigo-400 dark:focus:border-[var(--neon-blue)] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-500/10 outline-none transition-all resize-none dark:text-white dark:placeholder-gray-600 ${isCentered ? 'h-24' : 'h-20'}`}
-                />
-            </div>
-
-            {/* Use Cases */}
-            <div className="space-y-1">
-                <label className="text-xs font-medium text-gray-500 dark:text-gray-400">使用场景 (Optional)</label>
-                <textarea
-                value={formData.useCases}
-                onChange={e => setFormData({ ...formData, useCases: e.target.value })}
-                placeholder="产品具体使用场景..."
-                className={`w-full px-4 py-3 text-sm bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl focus:border-indigo-400 dark:focus:border-[var(--neon-blue)] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-500/10 outline-none transition-all resize-none dark:text-white dark:placeholder-gray-600 ${isCentered ? 'h-24' : 'h-20'}`}
+                value={formData.description}
+                onChange={e => setFormData({ ...formData, description: e.target.value })}
+                placeholder="补充更多产品细节、目标人群或特殊要求..."
+                className={`w-full px-5 py-4 text-sm bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl focus:bg-black/40 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all duration-300 resize-none text-white placeholder-gray-600 backdrop-blur-sm custom-scrollbar ${isCentered ? 'h-36' : 'h-32'}`}
                 />
             </div>
         </>
       )}
 
-      {/* Description - Full Width in Grid */}
-      <div className={`space-y-1 ${isCentered ? 'md:col-span-2' : ''}`}>
-        <label className="text-xs font-medium text-gray-500 dark:text-gray-400">补充描述</label>
-        <textarea
-          value={formData.description}
-          onChange={e => setFormData({ ...formData, description: e.target.value })}
-          placeholder="其他补充信息..."
-          className={`w-full px-4 py-3 text-sm bg-gray-50 dark:bg-black/40 border border-gray-200 dark:border-white/10 rounded-xl focus:border-indigo-400 dark:focus:border-[var(--neon-blue)] focus:ring-2 focus:ring-indigo-100 dark:focus:ring-blue-500/10 outline-none transition-all resize-none dark:text-white dark:placeholder-gray-600 ${isCentered ? 'h-24' : 'h-20'}`}
-        />
-      </div>
-
       {/* Submit Button */}
-      <div className={isCentered ? 'md:col-span-2 mt-4' : 'mt-2'}>
+      <div className={isCentered ? 'md:col-span-2 mt-8' : 'mt-4'}>
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 dark:bg-[var(--neon-blue)] dark:hover:bg-blue-400 dark:text-black font-bold rounded-xl shadow-lg shadow-indigo-200 dark:shadow-blue-500/20 transition-all flex items-center justify-center gap-2 group disabled:opacity-70 disabled:cursor-not-allowed text-base"
+          className="w-full py-5 bg-[#22d3ee] hover:bg-[#06b6d4] text-black font-bold text-lg rounded-xl shadow-[0_0_40px_rgba(34,211,238,0.2)] hover:shadow-[0_0_60px_rgba(34,211,238,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group relative overflow-hidden"
         >
           {loading ? (
             <Loader2 className="w-5 h-5 animate-spin" />
           ) : (
             <>
-              <span>开始深度分析</span>
-              <Zap className="w-5 h-5 group-hover:fill-current" />
+              <span className="relative z-10 tracking-[0.2em] font-black text-base">开始深度分析</span>
+              <Zap className="w-5 h-5 fill-black group-hover:rotate-12 transition-transform relative z-10" />
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 skew-y-12"></div>
             </>
           )}
         </button>

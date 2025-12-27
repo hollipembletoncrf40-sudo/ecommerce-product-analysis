@@ -1,51 +1,98 @@
-import { Home, BarChart2, Settings, Box } from 'lucide-react';
+import { ArrowUp, Home, LayoutGrid, Settings, Package } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
+import { useState } from 'react';
 
+// Main Navigation
 const navItems = [
   { icon: Home, label: '仪表盘', path: '/' },
-  { icon: BarChart2, label: '选品分析', path: '/analysis' },
-  { icon: Box, label: '产品库', path: '/products' },
+  { icon: LayoutGrid, label: '选品分析', path: '/analysis' },
+  { icon: Package, label: '产品库', path: '/products' },
   { icon: Settings, label: '设置', path: '/settings' },
 ];
 
 export function Sidebar() {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <aside className="w-64 bg-white dark:bg-[var(--bg-card)] border-r border-gray-200 dark:border-[var(--border-color)] h-screen flex flex-col fixed left-0 top-0 z-50 transition-colors duration-300">
-      <div className="h-16 flex items-center px-6 border-b border-gray-100 dark:border-[var(--border-color)]">
-        <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-          选品大脑
+    <aside 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className={clsx(
+        "fixed left-0 top-0 h-screen z-50 flex flex-col transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)",
+        "bg-black shadow-[10px_0_30px_rgba(0,0,0,0.5)] rounded-r-[40px] overflow-hidden border-r border-white/5",
+        isHovered ? "w-[240px]" : "w-[68px]"
+      )}
+    >
+      {/* Header: Back to Top */}
+      <div className="h-20 flex items-center shrink-0 px-0 relative group/head cursor-pointer" onClick={scrollToTop}>
+        <div className="w-[68px] flex items-center justify-center">
+            <ArrowUp className="w-5 h-5 text-gray-400 group-hover/head:text-white transition-colors" />
+        </div>
+        <span className={clsx(
+            "text-base font-medium text-gray-400 whitespace-nowrap transition-all duration-300 group-hover/head:text-white", 
+            isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 pointer-events-none"
+        )}>
+          Back to Top
         </span>
       </div>
+
+      {/* Divider */}
+      <div className="mx-4 h-px bg-white/10 shrink-0 mb-4" />
       
-      <nav className="flex-1 py-6 px-3 space-y-1">
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar px-3 space-y-2">
         {navItems.map((item) => (
           <NavLink
-            key={item.path}
+            key={item.label}
             to={item.path}
             className={({ isActive }) =>
               clsx(
-                "flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+                "group flex items-center h-12 rounded-2xl transition-all duration-300 relative",
                 isActive
-                  ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 shadow-sm dark:shadow-[0_0_10px_rgba(59,130,246,0.15)]"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-gray-200"
+                  ? "bg-[#2f2f46] text-[#818CF8]" // Dark Indigo pill
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
               )
             }
           >
-            <item.icon className="w-5 h-5 mr-3 opacity-75" />
-            {item.label}
+            {({ isActive }) => (
+                <>
+                    <div className="w-[44px] flex items-center justify-center shrink-0 ml-[1px]">
+                         <item.icon 
+                            className={clsx(
+                                "w-6 h-6 transition-colors duration-300", 
+                                isActive ? "text-[#818CF8]" : "text-gray-400 group-hover:text-white"
+                            )} 
+                         />
+                    </div>
+                         
+                    <span className={clsx(
+                        "whitespace-nowrap text-sm font-medium transition-all duration-300 ml-1", 
+                        isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4 overflow-hidden"
+                    )}>
+                        {item.label}
+                    </span>
+                </>
+            )}
           </NavLink>
         ))}
       </nav>
       
-      <div className="p-4 border-t border-gray-100 dark:border-[var(--border-color)]">
-        <div className="flex items-center p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-transparent dark:border-white/5">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-white text-xs font-bold shadow-lg shadow-purple-500/20">
+      {/* User Avatar (Optional - kept small at bottom) */}
+       <div className="p-4 shrink-0 mb-2">
+        <div className={clsx(
+          "flex items-center p-2 rounded-2xl transition-all duration-300",
+          isHovered ? "bg-white/5" : "justify-center"
+        )}>
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-500 to-purple-500 flex items-center justify-center text-white text-[10px] font-bold shadow-lg shrink-0">
             JP
           </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-200">Josephine</p>
-            <p className="text-xs text-gray-500 dark:text-gray-500">管理员</p>
+          <div className={clsx("ml-3 overflow-hidden transition-all duration-300", isHovered ? "w-auto opacity-100" : "w-0 opacity-0")}>
+            <p className="text-xs font-bold text-white whitespace-nowrap">Josephine</p>
           </div>
         </div>
       </div>
