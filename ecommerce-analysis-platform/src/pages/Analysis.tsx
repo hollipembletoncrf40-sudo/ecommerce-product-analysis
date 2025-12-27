@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useAnalysis } from '../context/AnalysisContext';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Sparkles, TrendingUp, Target, Megaphone, Crown, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Target, Crown, TrendingUp, Megaphone, AlertTriangle, ArrowRight, BrainCircuit, Sparkles, RefreshCw, Zap } from 'lucide-react';
 import { AnalysisForm } from '../components/AnalysisForm';
 
 
@@ -73,31 +73,52 @@ function LoadingScreen() {
   return (
     <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
       {/* Dynamic Background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-black to-black"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/40 via-black to-black animate-pulse-slow"></div>
       
-      {/* Orb Animation */}
-      <div className="relative w-64 h-64 mb-16">
-         {/* Core Glow */}
-         <div className="absolute inset-0 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
-         <div className="absolute inset-0 bg-cyan-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
-         <div className="absolute inset-0 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
+      {/* Radiant Orb Animation */}
+      <div className="relative w-56 h-56 mb-20 flex items-center justify-center">
+         {/* Ambient Glows */}
+         <div className="absolute -inset-10 bg-cyan-500/30 rounded-full blur-[60px] animate-pulse"></div>
+         <div className="absolute -inset-10 bg-purple-600/30 rounded-full blur-[60px] animate-pulse animation-delay-2000"></div>
+
+         {/* Spinning Gradient Rings */}
+         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-cyan-400 via-transparent to-purple-500 blur-xl animate-spin-slow opacity-80"></div>
+         <div className="absolute inset-2 rounded-full bg-gradient-to-bl from-pink-500 via-transparent to-blue-500 blur-lg animate-spin-reverse-slow opacity-80"></div>
          
-         {/* Inner White Core */}
-         <div className="absolute inset-4 bg-white/10 backdrop-blur-3xl rounded-full border border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.3)] animate-pulse-glow flex items-center justify-center">
-             <Sparkles className="w-20 h-20 text-white animate-spin-slow opacity-80" />
+         {/* Sharp Ring Border */}
+         <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-cyan-400/80 border-l-purple-500/80 blur-[1px] animate-spin-slow"></div>
+
+         {/* Core Sphere - Siri-like Fluid Light */}
+         <div className="relative w-40 h-40 rounded-full border border-white/20 shadow-[0_0_80px_rgba(34,211,238,0.4),_inset_0_0_20px_rgba(255,255,255,0.2)] flex items-center justify-center z-10 overflow-hidden bg-black/50 backdrop-blur-xl">
+             
+             {/* Liquid Blobs */}
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] animate-spin-slower opacity-60">
+                <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-cyan-500 blur-[40px] mix-blend-screen animate-blob"></div>
+                <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-purple-600 blur-[40px] mix-blend-screen animate-blob animation-delay-2000"></div>
+                <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-blue-500 blur-[40px] mix-blend-screen animate-blob animation-delay-4000"></div>
+             </div>
+
+             {/* Central White Hotspot */}
+             <div className="absolute inset-0 flex items-center justify-center">
+                 <div className="w-20 h-20 bg-white/40 blur-[30px] rounded-full animate-pulse-glow mix-blend-overlay"></div>
+             </div>
+
+             {/* Internal Reflection / Gloss */}
+             <div className="absolute inset-0 bg-gradient-to-tr from-white/30 via-transparent to-transparent opacity-40 rounded-full z-20 pointer-events-none"></div>
          </div>
       </div>
 
       {/* Text Content */}
-      <div className="relative z-10 text-center space-y-6 max-w-md w-full px-6">
-        <h3 className="text-3xl font-bold text-white tracking-tight leading-none animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="relative z-10 text-center space-y-6 max-w-lg w-full px-6">
+        <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-gray-200 tracking-wide leading-relaxed animate-in fade-in slide-in-from-bottom-4 duration-500 drop-shadow-lg">
            {messages[msgIndex]}
         </h3>
         
-        {/* Progress Bar */}
-        <div className="w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
+        {/* Radiant Progress Bar */}
+        <div className="w-full h-1 bg-gray-900/50 rounded-full overflow-hidden backdrop-blur-sm border border-white/5 relative">
+            <div className="absolute inset-0 bg-white/5 animate-pulse"></div>
             <div 
-                className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 transition-all duration-300 ease-out"
+                className="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 shadow-[0_0_20px_rgba(34,211,238,0.8)] transition-all duration-300 ease-out relative"
                 style={{ width: `${progress}%` }}
             ></div>
         </div>
@@ -116,7 +137,7 @@ function LoadingScreen() {
 }
 
 export function Analysis() {
-  const { formData, loading, result, error, clearAnalysis } = useAnalysis();
+  const { formData, loading, result, error, clearAnalysis, runAnalysis } = useAnalysis();
   
   // Use centered layout if no result and not loading
   const isCenteredLayout = !result && !loading;
@@ -135,7 +156,7 @@ export function Analysis() {
             <div className="w-full max-w-[1920px] px-6 lg:px-10 mx-auto h-20 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     {/* Professional Logo - No Background Box */}
-                    <Sparkles className="w-8 h-8 text-indigo-500 fill-indigo-500/20" />
+                    <BrainCircuit className="w-8 h-8 text-indigo-500" strokeWidth={1.5} />
                     
                     <div className="flex flex-col">
                         <div className="flex items-center gap-2">
@@ -166,6 +187,15 @@ export function Analysis() {
                              </div>
                          </div>
                          <button
+                            type="button"
+                            onClick={() => runAnalysis()}
+                            className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] rounded-lg transition-all transform hover:scale-105"
+                         >
+                            <Zap className="w-4 h-4 fill-white" />
+                            再次深度分析
+                         </button>
+                         <button
+                            type="button"
                             onClick={clearAnalysis}
                             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white bg-gray-50 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 rounded-lg transition-all"
                          >
@@ -331,7 +361,11 @@ export function Analysis() {
                                                 td: ({node, ...props}) => <td className="px-6 py-4 border-t border-gray-100 dark:border-white/5" {...props} />,
                                             }}
                                         >
-                                            {section.content}
+                                            {/* Preprocess: Fix malformed markdown bold syntax */}
+                                            {section.content
+                                                .replace(/\*\*\s+/g, '**')  // "** text" -> "**text"
+                                                .replace(/\s+\*\*/g, '**')  // "text **" -> "text**"
+                                            }
                                         </ReactMarkdown>
                                     </article>
                                 </div>

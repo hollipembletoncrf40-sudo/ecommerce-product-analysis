@@ -2,6 +2,19 @@ import React, { createContext, useContext, useState, useEffect, type ReactNode }
 
 const STORAGE_KEY = 'currentAnalysisResult';
 const FORM_STORAGE_KEY = 'currentAnalysisForm';
+const HISTORY_STORAGE_KEY = 'analysis_history';
+
+interface HistoryItem {
+  id: string;
+  timestamp: number;
+  data: {
+    productName: string;
+    category: string;
+    description: string;
+    useCases: string;
+    painPoints: string;
+  };
+}
 
 interface AnalysisContextType {
   formData: {
@@ -21,8 +34,11 @@ interface AnalysisContextType {
   loading: boolean;
   result: any;
   error: string;
+  history: HistoryItem[];
   runAnalysis: (e?: React.FormEvent) => Promise<void>;
   clearAnalysis: () => void;
+  clearForm: () => void;
+  loadHistory: (item: HistoryItem) => void;
 }
 
 const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined);
@@ -39,6 +55,11 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     };
   });
   
+  const [history, setHistory] = useState<HistoryItem[]>(() => {
+    const saved = localStorage.getItem(HISTORY_STORAGE_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any>(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -51,6 +72,11 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formData));
   }, [formData]);
 
+  // Persist history
+  useEffect(() => {
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history));
+  }, [history]);
+
   // Persist result
   useEffect(() => {
     if (result) {
@@ -60,21 +86,39 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
 
   const clearAnalysis = () => {
     setResult(null);
-    setFormData({ productName: '', category: '', description: '', useCases: '', painPoints: '' });
     localStorage.removeItem(STORAGE_KEY);
+    // Do NOT clear formData or FORM_STORAGE_KEY
+  };
+
+  const clearForm = () => {
+    setFormData({ productName: '', category: '', description: '', useCases: '', painPoints: '' });
     localStorage.removeItem(FORM_STORAGE_KEY);
+  };
+
+  const loadHistory = (item: HistoryItem) => {
+    setFormData(item.data);
   };
 
   const runAnalysis = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     
+    // Add to history if valid
+    if (formData.productName || formData.category) {
+        setHistory(prev => {
+            const displayTitle = formData.productName || formData.category || '未知选品';
+            const newItem: HistoryItem = {
+                id: Date.now().toString(),
+                timestamp: Date.now(),
+                data: { ...formData }
+            };
+            // Remove duplicates (same product name AND category)
+            const filtered = prev.filter(p => !((p.data.productName === formData.productName) && (p.data.category === formData.category)));
+            return [newItem, ...filtered].slice(0, 20); // Keep last 20
+        });
+    }
+
     setLoading(true);
     setError('');
-    // Do not clear result immediately if you want to show previous result while loading, 
-    // but usually we want to show loading state. 
-    // However, for "background analysis", we might want to keep the old result? 
-    // No, usually we want to clear old result to show new one is coming or at least show loading overlay.
-    // The user said "won't pause analysis", implying they want to navigate away while it loads.
     
     setResult(null);
     localStorage.removeItem(STORAGE_KEY);
@@ -107,8 +151,11 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       loading,
       result,
       error,
+      history,
       runAnalysis,
-      clearAnalysis
+      clearAnalysis,
+      clearForm,
+      loadHistory
     }}>
       {children}
     </AnalysisContext.Provider>

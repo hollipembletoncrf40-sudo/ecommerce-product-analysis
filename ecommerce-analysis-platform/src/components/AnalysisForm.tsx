@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Zap, Loader2, ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Zap, Loader2, ChevronDown, ChevronUp, Clock, Trash2, History, X } from 'lucide-react';
 import { useAnalysis } from '../context/AnalysisContext';
 
 interface AnalysisFormProps {
@@ -8,26 +7,110 @@ interface AnalysisFormProps {
 }
 
 export function AnalysisForm({ layout }: AnalysisFormProps) {
-  const { formData, setFormData, loading, runAnalysis } = useAnalysis();
-  const [showAdvanced, setShowAdvanced] = React.useState(layout === 'centered');
+  const { formData, setFormData, loading, runAnalysis, history, loadHistory, clearForm } = useAnalysis();
+  const [showAdvanced, setShowAdvanced] = useState(layout === 'centered');
+  const [showHistory, setShowHistory] = useState(false);
+  const historyRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     runAnalysis(e);
   };
 
+  // Close history when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (historyRef.current && !historyRef.current.contains(event.target as Node)) {
+        setShowHistory(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const isCentered = layout === 'centered';
 
+  const formatTime = (timestamp: number) => {
+    return new Date(timestamp).toLocaleString('zh-CN', {
+      month: 'numeric',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   return (
+    <div className="relative">
     <form onSubmit={handleSubmit} className={isCentered ? "grid grid-cols-1 md:grid-cols-2 gap-8" : "space-y-5"}>
+      
+      {/* Form Utilities Header */}
+      <div className={`flex justify-end gap-3 ${isCentered ? "md:col-span-2" : ""}`}>
+          <div className="relative" ref={historyRef}>
+              <button
+                type="button"
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-cyan-400 transition-colors px-2 py-1 rounded-md hover:bg-white/5"
+              >
+                  <History className="w-3.5 h-3.5" />
+                  历史记录
+              </button>
+              
+              {/* History Dropdown */}
+              {showHistory && (
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-2xl backdrop-blur-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+                          <span className="text-xs font-bold text-gray-400">最近分析</span>
+                          <button onClick={() => setShowHistory(false)} className="text-gray-500 hover:text-white">
+                              <X className="w-3.5 h-3.5" />
+                          </button>
+                      </div>
+                      <div className="max-h-60 overflow-y-auto custom-scrollbar">
+                          {history.length === 0 ? (
+                              <div className="px-4 py-6 text-center text-xs text-gray-600">
+                                  暂无历史记录
+                              </div>
+                          ) : (
+                              history.map((item) => (
+                                  <button
+                                      key={item.id}
+                                      type="button"
+                                      onClick={() => {
+                                          loadHistory(item);
+                                          setShowHistory(false);
+                                      }}
+                                      className="w-full text-left px-4 py-3 hover:bg-white/5 border-b border-white/[0.02] last:border-0 group transition-colors"
+                                  >
+                                      <p className="text-sm text-gray-300 group-hover:text-cyan-400 font-medium truncate mb-0.5">
+                                          {item.data.productName}
+                                      </p>
+                                      <div className="flex justify-between items-center text-[10px] text-gray-600">
+                                          <span>{item.data.category}</span>
+                                          <span>{formatTime(item.timestamp)}</span>
+                                      </div>
+                                  </button>
+                              ))
+                          )}
+                      </div>
+                  </div>
+              )}
+          </div>
+
+          <button
+            type="button"
+            onClick={clearForm}
+            className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-red-400 transition-colors px-2 py-1 rounded-md hover:bg-white/5"
+          >
+              <Trash2 className="w-3.5 h-3.5" />
+              清空
+          </button>
+      </div>
       {/* Product Name */}
       <div className="space-y-2">
         <label className="text-xs font-bold text-gray-400 pl-1 tracking-[0.15em]">产品名称</label>
         <input
           type="text"
-          required
           value={formData.productName}
           onChange={e => setFormData({ ...formData, productName: e.target.value })}
-          placeholder="如：便携式咖啡机"
+          placeholder="如：便携式咖啡机 (若未定选品可留空)"
           className="w-full px-5 py-4 text-sm bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 rounded-xl focus:bg-black/40 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/20 outline-none transition-all duration-300 text-white placeholder-gray-600 backdrop-blur-sm"
         />
       </div>
@@ -92,5 +175,6 @@ export function AnalysisForm({ layout }: AnalysisFormProps) {
         </button>
       </div>
     </form>
+    </div>
   );
 }
