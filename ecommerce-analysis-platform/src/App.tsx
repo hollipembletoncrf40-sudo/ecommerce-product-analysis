@@ -4,18 +4,21 @@ import { Dashboard } from './pages/Dashboard';
 import { Analysis } from './pages/Analysis';
 import { Products } from './pages/Products';
 import { Settings } from './pages/Settings';
+import { AnalysisProvider } from './context/AnalysisContext';
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="analysis" element={<Analysis />} />
-          <Route path="products" element={<Products />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-      </Routes>
+      <AnalysisProvider>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="analysis" element={<Analysis />} />
+            <Route path="products" element={<Products />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Routes>
+      </AnalysisProvider>
     </BrowserRouter>
   );
 }

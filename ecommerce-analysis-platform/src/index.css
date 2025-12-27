@@ -7,9 +7,54 @@
   --font-primary: "Inter", system-ui, sans-serif;
 }
 
+:root {
+  --bg-dark: #050505;
+  --bg-card: #0a0a0a;
+  --bg-card-hover: #121212;
+  --border-color: #262626;
+  --accent-blue: #3b82f6;
+  --accent-purple: #8b5cf6;
+  --accent-pink: #ec4899;
+  --neon-blue: #00f0ff;
+  --neon-purple: #bd00ff;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+}
+
 body {
   @apply bg-slate-50 text-slate-900 antialiased;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* Dark Mode Overrides */
+.dark body {
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+}
+
+.dark .glass-panel {
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .glass-input {
+  background: rgba(20, 20, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.dark .glass-input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+.dark .neon-text {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.dark .neon-border {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
 }
 
 /* Custom scrollbar */
@@ -19,17 +64,24 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
-  border-radius: 4px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #818cf8 0%, #a78bfa 100%);
+  background: #cbd5e1;
   border-radius: 4px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #333;
+}
+
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #6366f1 0%, #8b5cf6 100%);
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #444;
 }
 
 /* Smooth animations */

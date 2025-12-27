@@ -1,64 +1,20 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
-import path from 'path';
+import { getAllAnalyses, saveAnalysis } from './services/storage.js';
 
 const router = Router();
-
-// Initialize Prisma Client with Driver Adapter
-const dbPath = path.resolve(process.cwd(), 'prisma', 'dev.db');
-const adapter = new PrismaBetterSqlite3({ url: `file:${dbPath}` });
-const prisma = new PrismaClient({ adapter });
 
 router.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Get all reference tags
-router.get('/tags', async (req, res) => {
-    try {
-        const tags = await prisma.referenceTag.findMany();
-        res.json(tags);
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'Failed to fetch tags' });
-    }
-});
-
 // Get all product analyses
 router.get('/products', async (req, res) => {
     try {
-        const products = await prisma.productAnalysis.findMany({
-            orderBy: { createdAt: 'desc' }
-        });
+        const products = getAllAnalyses();
         res.json(products);
     } catch (e) {
          console.error(e);
          res.status(500).json({ error: 'Failed to fetch products' });
-    }
-});
-
-// Create a new product analysis (Stub for now)
-router.post('/products', async (req, res) => {
-    try {
-        const data = req.body;
-        // In a real scenario, validte data with Zod
-        const product = await prisma.productAnalysis.create({
-            data: {
-                productName: data.productName,
-                targetAudience: data.targetAudience,
-                usageScenario: data.usageScenario,
-                priceRange: data.priceRange || '',
-                coreFeatures: data.coreFeatures || '',
-                marketingPoints: JSON.stringify(data.marketingPoints || []),
-                platformAdvice: JSON.stringify(data.platformAdvice || []),
-                fullReport: data.fullReport || ''
-            }
-        });
-        res.json(product);
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({ error: 'Failed to create product analysis' });
     }
 });
 
@@ -72,17 +28,20 @@ router.post('/analyze', async (req, res) => {
         
         const analysisResult = await generateAnalysis(productName, category, description);
 
-        // Return result directly (skip DB save for now due to adapter issues)
-        res.json({
-            productName: analysisResult.productName,
-            targetAudience: analysisResult.targetAudience,
-            usageScenario: analysisResult.usageScenario,
-            coreFeatures: analysisResult.coreFeatures,
-            fullReport: analysisResult.fullReport,
-            marketingHooks: analysisResult.marketingHooks,
-            platformAdvice: analysisResult.platformAdvice,
-            productSuggestions: analysisResult.productSuggestions
+        // Save to file-based storage
+        const saved = saveAnalysis({
+            productName: analysisResult.productName || productName,
+            category: category,
+            targetAudience: analysisResult.targetAudience || '',
+            usageScenario: analysisResult.usageScenario || '',
+            coreFeatures: analysisResult.coreFeatures || '',
+            fullReport: analysisResult.fullReport || '',
+            marketingHooks: analysisResult.marketingHooks || [],
+            platformAdvice: analysisResult.platformAdvice || [],
+            productSuggestions: analysisResult.productSuggestions || []
         });
+
+        res.json(saved);
     } catch (e: any) {
         console.error(e);
         res.status(500).json({ error: e.message || 'Failed to generate analysis' });
