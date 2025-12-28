@@ -4,10 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Target, Crown, TrendingUp, Megaphone, AlertTriangle, ArrowRight, BrainCircuit, Sparkles, RefreshCw, Zap } from 'lucide-react';
 import { AnalysisForm } from '../components/AnalysisForm';
-
-
-
-
+import { RechargeModal } from '../components/RechargeModal';
 
 // Helper to split markdown into sections
 function parseReport(markdown: string) {
@@ -137,7 +134,8 @@ function LoadingScreen() {
 }
 
 export function Analysis() {
-  const { formData, loading, result, error, clearAnalysis, runAnalysis } = useAnalysis();
+  const { formData, loading, result, error, clearAnalysis, runAnalysis, quota, redeem } = useAnalysis();
+  const [showRecharge, setShowRecharge] = useState(false);
   
   // Use centered layout if no result and not loading
   const isCenteredLayout = !result && !loading;
@@ -149,13 +147,18 @@ export function Analysis() {
 
   return (
     <div className="min-h-screen pb-12">
-        {/* Simplified Premium Header - Only show in Result Mode or Keep it for navigation? 
-            Let's keep it but maybe simpler in centered mode.
-        */}
+        {/* Recharge Modal */}
+        <RechargeModal 
+          isOpen={showRecharge} 
+          onClose={() => setShowRecharge(false)} 
+          onRedeem={redeem}
+        />
+
+        {/* Simplified Premium Header */}
         <header className="sticky top-0 z-40 bg-white/80 dark:bg-[#050505]/80 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 shadow-sm">
             <div className="w-full max-w-[1920px] px-6 lg:px-10 mx-auto h-20 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    {/* Professional Logo - No Background Box */}
+                    {/* Professional Logo */}
                     <BrainCircuit className="w-8 h-8 text-indigo-500" strokeWidth={1.5} />
                     
                     <div className="flex flex-col">
@@ -173,8 +176,25 @@ export function Analysis() {
                     </div>
                 </div>
 
-                {result && (
-                    <div className="flex items-center gap-6">
+                <div className="flex items-center gap-6">
+                    {/* Quota Display */}
+                    <button 
+                        onClick={() => setShowRecharge(true)}
+                        className="group flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full pl-4 pr-1 py-1 transition-all"
+                    >
+                        <div className="flex items-center gap-2">
+                             <div className={`w-2 h-2 rounded-full ${quota?.allowed ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]'}`}></div>
+                             <span className="text-xs font-medium text-gray-400 group-hover:text-gray-300 transition-colors">
+                                剩余次数: <span className={quota?.allowed ? 'text-white font-bold' : 'text-red-500 font-bold'}>{quota?.remaining ?? '-'}</span>
+                             </span>
+                        </div>
+                        <div className="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full transition-colors">
+                            充值
+                        </div>
+                    </button>
+
+                    {result && (
+                       <>
                          <div className="hidden lg:flex items-center gap-8">
                              <div className="text-right">
                                  <p className="text-xs text-gray-400">当前分析</p>
@@ -183,7 +203,7 @@ export function Analysis() {
                              <div className="h-8 w-px bg-gray-200 dark:bg-white/10"></div>
                              <div className="text-right">
                                  <p className="text-xs text-gray-400">维度覆盖</p>
-                                 <p className="text-sm font-semibold text-gray-900 dark:text-white">15 维全景扫描</p>
+                                 <p className="text-sm font-semibold text-gray-900 dark:text-white">18 维全景扫描</p>
                              </div>
                          </div>
                          <button
@@ -198,12 +218,14 @@ export function Analysis() {
                             type="button"
                             onClick={clearAnalysis}
                             className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-white bg-gray-50 dark:bg-white/5 hover:bg-indigo-50 dark:hover:bg-white/10 rounded-lg transition-all"
+
                          >
                             <RefreshCw className="w-4 h-4" />
                             新分析
                          </button>
-                    </div>
+                    </>
                 )}
+            </div>
             </div>
         </header>
 
@@ -352,13 +374,17 @@ export function Analysis() {
                                                 h4: ({node, ...props}) => <h4 className="text-lg font-bold text-gray-800 dark:text-gray-100 mt-8 mb-4 flex items-center gap-2" {...props} />,
                                                 strong: ({node, ...props}) => <strong className="font-bold text-indigo-700 dark:text-indigo-300 border-b border-indigo-200 dark:border-indigo-800/50 pb-0.5" {...props} />,
                                                 table: ({node, ...props}) => (
-                                                    <div className="my-8 overflow-hidden rounded-xl border border-gray-100 dark:border-white/10 shadow-sm bg-white/50 dark:bg-white/5">
-                                                        <table className="w-full text-sm text-left" {...props} />
+                                                    <div className="my-8 overflow-x-auto rounded-xl border border-gray-100 dark:border-white/10 shadow-lg bg-white/80 dark:bg-white/5 backdrop-blur-sm">
+                                                        <table className="w-full text-sm text-left border-collapse" {...props} />
                                                     </div>
                                                 ),
-                                                thead: ({node, ...props}) => <thead className="bg-gray-50 dark:bg-white/10 text-gray-900 dark:text-white font-bold" {...props} />,
-                                                th: ({node, ...props}) => <th className="px-6 py-4" {...props} />,
-                                                td: ({node, ...props}) => <td className="px-6 py-4 border-t border-gray-100 dark:border-white/5" {...props} />,
+                                                thead: ({node, ...props}) => <thead className="bg-indigo-50 dark:bg-indigo-900/30 text-gray-900 dark:text-white font-bold border-b-2 border-indigo-200 dark:border-indigo-700" {...props} />,
+                                                tbody: ({node, ...props}) => <tbody className="divide-y divide-gray-100 dark:divide-white/10" {...props} />,
+                                                tr: ({node, ...props}) => <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors" {...props} />,
+                                                th: ({node, ...props}) => <th className="px-4 py-3 text-left font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap" {...props} />,
+                                                td: ({node, ...props}) => <td className="px-4 py-3 text-gray-700 dark:text-gray-300" {...props} />,
+                                                p: ({node, ...props}) => <p className="my-4 leading-relaxed text-gray-700 dark:text-gray-300" {...props} />,
+                                                blockquote: ({node, ...props}) => <blockquote className="my-6 pl-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 py-3 pr-4 rounded-r-lg italic text-gray-600 dark:text-gray-400" {...props} />,
                                             }}
                                         >
                                             {/* Preprocess: Fix malformed markdown bold syntax */}

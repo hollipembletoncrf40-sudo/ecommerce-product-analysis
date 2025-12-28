@@ -33,3 +33,24 @@ model ReferenceTag {
   
   @@unique([category, value])
 }
+
+model UserUsage {
+  clientId        String   @id
+  usageCount      Int      @default(0)
+  totalQuota      Int      @default(5)  // Starts with 5 free uses
+  
+  lastUsedAt      DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model AccessKey {
+  key             String   @id
+  usesAmount      Int      @default(30)
+  isUsed          Boolean  @default(false)
+  
+  usedByClientId  String?
+  usedAt          DateTime?
+  
+  createdAt       DateTime @default(now())
+}

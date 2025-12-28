@@ -1,0 +1,19 @@
+-- CreateTable
+CREATE TABLE "UserUsage" (
+    "clientId" TEXT NOT NULL PRIMARY KEY,
+    "usageCount" INTEGER NOT NULL DEFAULT 0,
+    "totalQuota" INTEGER NOT NULL DEFAULT 5,
+    "lastUsedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "AccessKey" (
+    "key" TEXT NOT NULL PRIMARY KEY,
+    "usesAmount" INTEGER NOT NULL DEFAULT 30,
+    "isUsed" BOOLEAN NOT NULL DEFAULT false,
+    "usedByClientId" TEXT,
+    "usedAt" DATETIME,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -35,10 +35,14 @@ interface AnalysisContextType {
   result: any;
   error: string;
   history: HistoryItem[];
+  clientId: string;
+  quota: { allowed: boolean; remaining: number } | null;
   runAnalysis: (e?: React.FormEvent) => Promise<void>;
   clearAnalysis: () => void;
   clearForm: () => void;
   loadHistory: (item: HistoryItem) => void;
+  refreshQuota: () => Promise<void>;
+  redeem: (key: string) => Promise<{ success: boolean; addedQuota: number }>;
 }
 
 const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined);
@@ -67,6 +71,37 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
   });
   const [error, setError] = useState('');
 
+  // Client ID Management
+  const [clientId] = useState(() => {
+    let id = localStorage.getItem('product_analysis_client_id');
+    if (!id) {
+      id = 'client_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+      localStorage.setItem('product_analysis_client_id', id);
+    }
+    return id;
+  });
+
+  const [quota, setQuota] = useState<{ allowed: boolean; remaining: number } | null>(null);
+
+  // Load Quota
+  const refreshQuota = async () => {
+    try {
+      const res = await fetch('/api/quota', {
+        headers: { 'x-client-id': clientId }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setQuota(data);
+      }
+    } catch (err) {
+      console.error('Failed to load quota', err);
+    }
+  };
+
+  useEffect(() => {
+    refreshQuota();
+  }, [clientId]);
+
   // Persist form data
   useEffect(() => {
     localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(formData));
@@ -87,7 +122,6 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
   const clearAnalysis = () => {
     setResult(null);
     localStorage.removeItem(STORAGE_KEY);
-    // Do NOT clear formData or FORM_STORAGE_KEY
   };
 
   const clearForm = () => {
@@ -105,13 +139,11 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
     // Add to history if valid
     if (formData.productName || formData.category) {
         setHistory(prev => {
-            const displayTitle = formData.productName || formData.category || '未知选品';
             const newItem: HistoryItem = {
                 id: Date.now().toString(),
                 timestamp: Date.now(),
                 data: { ...formData }
             };
-            // Remove duplicates (same product name AND category)
             const filtered = prev.filter(p => !((p.data.productName === formData.productName) && (p.data.category === formData.category)));
             return [newItem, ...filtered].slice(0, 20); // Keep last 20
         });
@@ -119,29 +151,51 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
 
     setLoading(true);
     setError('');
-    
     setResult(null);
-    localStorage.removeItem(STORAGE_KEY);
-
+    
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'x-client-id': clientId
+        },
         body: JSON.stringify(formData)
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || 'Analysis failed');
+        if (data.quotaExceeded) {
+             throw new Error('QUOTA_EXCEEDED');
+        }
+        throw new Error(data.error || 'Analysis failed');
       }
 
-      const data = await res.json();
       setResult(data);
+      refreshQuota(); // Update quota after successful analysis
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const redeem = async (key: string) => {
+      const res = await fetch('/api/quota/redeem', {
+          method: 'POST',
+          headers: { 
+              'Content-Type': 'application/json',
+              'x-client-id': clientId 
+          },
+          body: JSON.stringify({ key })
+      });
+      
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      
+      await refreshQuota();
+      return data;
   };
 
   return (
@@ -152,10 +206,14 @@ export function AnalysisProvider({ children }: { children: ReactNode }) {
       result,
       error,
       history,
+      quota,
+      clientId,
       runAnalysis,
       clearAnalysis,
       clearForm,
-      loadHistory
+      loadHistory,
+      refreshQuota,
+      redeem
     }}>
       {children}
     </AnalysisContext.Provider>

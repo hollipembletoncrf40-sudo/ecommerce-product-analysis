@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Package, Calendar, Eye, Search, Loader2 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ProductAnalysis {
   id: string;
@@ -65,14 +67,40 @@ export function Products() {
               </p>
             </div>
             
-            <div className="p-10 prose prose-slate dark:prose-invert max-w-none 
-              prose-headings:text-gray-800 dark:prose-headings:text-white
-              prose-p:text-gray-600 dark:prose-p:text-gray-300
-              prose-a:text-indigo-600 dark:prose-a:text-[var(--neon-blue)]
-              prose-strong:text-gray-900 dark:prose-strong:text-white
-              prose-blockquote:border-l-indigo-500 dark:prose-blockquote:border-[var(--neon-purple)] dark:prose-blockquote:text-gray-400
-            ">
-              <div dangerouslySetInnerHTML={{ __html: selectedProduct.fullReport?.replace(/\n/g, '<br/>') || '暂无报告内容' }} />
+            <div className="p-10">
+              <ReactMarkdown 
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({node, ...props}) => <h1 className="text-3xl font-black text-gray-900 dark:text-white mt-8 mb-6 pb-3 border-b border-gray-200 dark:border-white/10" {...props} />,
+                  h2: ({node, ...props}) => <h2 className="text-2xl font-bold text-gray-800 dark:text-white mt-10 mb-5 flex items-center gap-3" {...props} />,
+                  h3: ({node, ...props}) => <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mt-8 mb-4 pb-2 border-b border-gray-100 dark:border-white/5" {...props} />,
+                  h4: ({node, ...props}) => <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mt-6 mb-3" {...props} />,
+                  p: ({node, ...props}) => <p className="my-4 leading-relaxed text-gray-600 dark:text-gray-300 text-base" {...props} />,
+                  ul: ({node, ...props}) => <ul className="my-4 space-y-2 ml-1" {...props} />,
+                  li: ({node, ...props}) => (
+                    <li className="flex items-start gap-3 text-gray-600 dark:text-gray-300" {...props}>
+                      <span className="mt-2 w-1.5 h-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400 flex-shrink-0"></span>
+                      <div className="flex-1">{props.children}</div>
+                    </li>
+                  ),
+                  strong: ({node, ...props}) => <strong className="font-bold text-gray-900 dark:text-white" {...props} />,
+                  table: ({node, ...props}) => (
+                    <div className="my-8 overflow-x-auto rounded-xl border border-gray-200 dark:border-white/10 shadow-lg bg-white dark:bg-white/5">
+                      <table className="w-full text-sm text-left border-collapse" {...props} />
+                    </div>
+                  ),
+                  thead: ({node, ...props}) => <thead className="bg-indigo-50 dark:bg-indigo-900/30 text-gray-900 dark:text-white font-bold border-b-2 border-indigo-200 dark:border-indigo-700" {...props} />,
+                  tbody: ({node, ...props}) => <tbody className="divide-y divide-gray-100 dark:divide-white/10" {...props} />,
+                  tr: ({node, ...props}) => <tr className="hover:bg-gray-50 dark:hover:bg-white/5 transition-colors" {...props} />,
+                  th: ({node, ...props}) => <th className="px-4 py-3 text-left font-bold text-indigo-700 dark:text-indigo-300 whitespace-nowrap" {...props} />,
+                  td: ({node, ...props}) => <td className="px-4 py-3 text-gray-700 dark:text-gray-300" {...props} />,
+                  blockquote: ({node, ...props}) => <blockquote className="my-6 pl-4 border-l-4 border-indigo-500 dark:border-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20 py-3 pr-4 rounded-r-lg italic text-gray-600 dark:text-gray-400" {...props} />,
+                  hr: ({node, ...props}) => <hr className="my-10 border-gray-200 dark:border-white/10" {...props} />,
+                  code: ({node, ...props}) => <code className="px-1.5 py-0.5 bg-gray-100 dark:bg-white/10 rounded text-sm font-mono text-indigo-600 dark:text-indigo-300" {...props} />,
+                }}
+              >
+                {selectedProduct.fullReport || '暂无报告内容'}
+              </ReactMarkdown>
             </div>
           </div>
         </div>
